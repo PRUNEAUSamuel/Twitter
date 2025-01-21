@@ -81,12 +81,12 @@ class Tweets
         return $this;
     }
 
-    public function getContent(): ?contents
+    public function getContent(): ?Contents
     {
         return $this->content;
     }
 
-    public function setContent(?contents $content): static
+    public function setContent(?Contents $content): static
     {
         $this->content = $content;
 
