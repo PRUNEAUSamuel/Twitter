@@ -145,7 +145,7 @@ class Users
     {
         if (!$this->tweets->contains($tweet)) {
             $this->tweets->add($tweet);
-            $tweet->setUserId($this);
+            $tweet->setUser($this);
         }
 
         return $this;
@@ -155,8 +155,8 @@ class Users
     {
         if ($this->tweets->removeElement($tweet)) {
             // set the owning side to null (unless already changed)
-            if ($tweet->getUserId() === $this) {
-                $tweet->setUserId(null);
+            if ($tweet->getUser() === $this) {
+                $tweet->setUser(null);
             }
         }
 
