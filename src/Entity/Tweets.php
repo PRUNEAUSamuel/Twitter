@@ -24,7 +24,7 @@ class Tweets
 
     #[ORM\ManyToOne(inversedBy: 'tweets')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?users $user = null;
+    private ?Users $User = null;
 
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     private ?contents $content = null;
@@ -69,14 +69,14 @@ class Tweets
         return $this;
     }
 
-    public function getUser(): ?users
+    public function getUser(): ?Users
     {
-        return $this->user;
+        return $this->User;
     }
 
-    public function setUser(?users $user): static
+    public function setUser(?Users $User): static
     {
-        $this->user = $user;
+        $this->User = $User;
 
         return $this;
     }
