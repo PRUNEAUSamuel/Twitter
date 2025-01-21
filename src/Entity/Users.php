@@ -16,10 +16,10 @@ class Users
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, unique: true)]
     private ?string $username = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, unique: true)]
     private ?string $email = null;
 
     #[ORM\Column(length: 255)]
@@ -48,7 +48,9 @@ class Users
     private Collection $likes;
 
     public function __construct(){
-        $this->createdAt=new \DateTimeImmutable();
+        $this->createdAt = new \DateTimeImmutable();
+        $this->lastLogin = new \DateTimeImmutable();
+        $this->updatedAt = new \DateTimeImmutable();
         $this->tweets = new ArrayCollection();
         $this->likes = new ArrayCollection();
     }
