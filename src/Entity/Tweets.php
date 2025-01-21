@@ -24,10 +24,10 @@ class Tweets
 
     #[ORM\ManyToOne(inversedBy: 'tweets')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?users $user = null;
+    private ?Users $user = null;
 
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
-    private ?contents $content = null;
+    private ?Contents $content = null;
 
     /**
      * @var Collection<int, Likes>
@@ -69,12 +69,12 @@ class Tweets
         return $this;
     }
 
-    public function getUser(): ?users
+    public function getUser(): ?Users
     {
         return $this->user;
     }
 
-    public function setUser(?users $user): static
+    public function setUser(?Users $user): static
     {
         $this->user = $user;
 
