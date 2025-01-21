@@ -24,10 +24,18 @@ class Users
     private ?string $password = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $dateCreate = null;
+    private ?\DateTimeInterface $lastLogin = null;
+
+
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
+    private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $lastConnect = null;
+    private ?\DateTimeInterface $updatedAt = null;
+
+    public function __construct(){
+        $this->createdAt=new \DateTimeImmutable();
+    }
 
     public function getId(): ?int
     {
@@ -70,26 +78,41 @@ class Users
         return $this;
     }
 
-    public function getDateCreate(): ?\DateTimeInterface
+
+
+    public function getLastLogin(): ?\DateTimeInterface
     {
-        return $this->dateCreate;
+        return $this->lastLogin;
     }
 
-    public function setDateCreate(\DateTimeInterface $dateCreate): static
+    public function setLastLogin(\DateTimeInterface $lastLogin): static
     {
-        $this->dateCreate = $dateCreate;
+        $this->lastLogin = $lastLogin;
 
         return $this;
     }
 
-    public function getLastConnect(): ?\DateTimeInterface
+
+    public function getCreatedAt(): ?\DateTimeImmutable
     {
-        return $this->lastConnect;
+        return $this->createdAt;
     }
 
-    public function setLastConnect(\DateTimeInterface $lastConnect): static
+    public function setCreatedAt(\DateTimeImmutable $createdAt): static
     {
-        $this->lastConnect = $lastConnect;
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeInterface
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(\DateTimeInterface $updatedAt): static
+    {
+        $this->updatedAt = $updatedAt;
 
         return $this;
     }
