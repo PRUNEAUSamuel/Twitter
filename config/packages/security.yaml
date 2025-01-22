@@ -12,12 +12,16 @@ security:
         main:
             lazy: true
             provider: users_in_memory
-            form_login:
-                login_path: app_login
-                check_path: app_login
-                username_parameter: _username
-                password_parameter: _password
-                enable_csrf: true
+            custom_authenticator: App\Security\FormAuthenticator
+            entry_point: App\Security\FormAuthenticator
+
+
+            # form_login:
+            #     login_path: app_login
+            #     check_path: app_login
+            #     username_parameter: _username
+            #     password_parameter: _password
+            #     enable_csrf: true
             logout:
                 path: app_logout
                 # where to redirect after logout
