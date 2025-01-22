@@ -4,13 +4,17 @@ security:
         Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
     # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
     providers:
-        users_in_memory: { memory: null }
+        app_user_provider:
+            entity:
+                class: App\Entity\Users
+                property: username 
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
             lazy: true
+<<<<<<< HEAD
             provider: users_in_memory
             custom_authenticator: App\Security\FormAuthenticator
             entry_point: App\Security\FormAuthenticator
@@ -22,8 +26,19 @@ security:
             #     username_parameter: _username
             #     password_parameter: _password
             #     enable_csrf: true
+=======
+            provider: app_user_provider
+            form_login:
+                login_path: app_login
+                check_path: app_login
+                
+                username_parameter: _username
+                password_parameter: _password
+                enable_csrf: true
+>>>>>>> cb7f10bec4dd9387dfff03ccffb639bff07097de
             logout:
                 path: app_logout
+
                 # where to redirect after logout
                 # target: app_any_route
 
