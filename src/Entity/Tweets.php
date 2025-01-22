@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\TweetsRepository;
+use App\Entity\Users;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -71,12 +72,12 @@ class Tweets
 
     public function getUser(): ?Users
     {
-        return $this->User;
+        return $this->user;
     }
 
     public function setUser(?Users $user): static
     {
-        $this->User = $User;
+        $this->user = $user;
 
         return $this;
     }
