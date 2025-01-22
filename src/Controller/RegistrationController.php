@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Users;
 use App\Form\RegistrationFormType;
 use App\Security\EmailVerifier;
+use App\Entity\Tweets;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -78,5 +79,24 @@ class RegistrationController extends AbstractController
         $this->addFlash('success', 'Your email address has been verified.');
 
         return $this->redirectToRoute('app_register');
+    }
+    #[Route('/profile', name: 'app_profile', methods: ['GET'])]
+    public function profile(EntityManagerInterface $entityManager) : Response
+    {
+        $user = $this->getUser();
+        if (!$user) {
+            
+            return $this->redirectToRoute('app_login');
+        }
+    
+
+        $tweets = $entityManager
+        ->getRepository(Tweets::class)
+        ->findBy(['user' => $user], ['createdAt' => ['DESC']]);
+
+        return $this->render('users/profile.html.twig',[
+            'user' =>$user,
+            'tweets' => $tweets,
+        ]);
     }
 }
