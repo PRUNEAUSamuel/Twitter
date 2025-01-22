@@ -71,12 +71,12 @@ class Tweets
 
     public function getUser(): ?Users
     {
-        return $this->user;
+        return $this->User;
     }
 
     public function setUser(?Users $user): static
     {
-        $this->user = $user;
+        $this->User = $User;
 
         return $this;
     }
