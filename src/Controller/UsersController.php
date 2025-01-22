@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Users;
 use App\Form\UsersType;
 use App\Repository\UsersRepository;
+use App\Entity\Tweets;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -77,5 +78,27 @@ final class UsersController extends AbstractController
         }
 
         return $this->redirectToRoute('app_users_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/profile/{id}', name: 'app_user_profile', methods: ['GET'])]
+    public function profile(EntityManagerInterface $entityManager) : Response
+    {
+        $user = $this->getUser();
+        if (!$user) {
+            
+            return $this->redirectToRoute('app_users_index', [], Response::HTTP_SEE_OTHER);
+        }
+    
+
+        
+
+        $tweets = $entityManager
+        ->getRepository(Tweets::class)
+        ->findBy(['user' => $user], ['createdAt' => ['DESC']]);
+
+        return $this->render('users/profile.html.twig',[
+            'user' =>$user,
+            'tweets' => $tweets,
+        ]);
     }
 }
