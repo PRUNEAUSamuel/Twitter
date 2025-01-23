@@ -14,28 +14,15 @@ security:
             security: false
         main:
             lazy: true
-<<<<<<< HEAD
-            provider: users_in_memory
-            custom_authenticator: App\Security\FormAuthenticator
-            entry_point: App\Security\FormAuthenticator
-
-
-            # form_login:
-            #     login_path: app_login
-            #     check_path: app_login
-            #     username_parameter: _username
-            #     password_parameter: _password
-            #     enable_csrf: true
-=======
             provider: app_user_provider
             form_login:
+                default_target_path: app_tweets_index
                 login_path: app_login
                 check_path: app_login
                 
                 username_parameter: _username
                 password_parameter: _password
                 enable_csrf: true
->>>>>>> cb7f10bec4dd9387dfff03ccffb639bff07097de
             logout:
                 path: app_logout
 
