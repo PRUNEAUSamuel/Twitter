@@ -12,6 +12,10 @@
                 <td>{{ tweet.id }}</td>
             </tr>
             <tr>
+                <th>Content</th>
+                <td>{{ tweet.content }}</td>
+            </tr>
+            <tr>
                 <th>CreatedAt</th>
                 <td>{{ tweet.createdAt ? tweet.createdAt|date('Y-m-d H:i:s') : '' }}</td>
             </tr>

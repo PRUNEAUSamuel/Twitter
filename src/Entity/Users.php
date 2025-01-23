@@ -58,6 +58,12 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private bool $isVerified = false;
 
+    /**
+     * @var Collection<int, Retweet>
+     */
+    #[ORM\OneToMany(targetEntity: Retweet::class, mappedBy: 'user')]
+    private Collection $retweets;
+
     public function __construct(){
         $this->createdAt = new \DateTimeImmutable();
         $this->lastLogin = new \DateTimeImmutable();
@@ -65,6 +71,7 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
         $this->tweets = new ArrayCollection();
         $this->likes = new ArrayCollection();
         $this->roles = $this->getRoles();
+        $this->retweets = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -241,6 +248,36 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     public function setIsVerified(bool $isVerified): static
     {
         $this->isVerified = $isVerified;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Retweet>
+     */
+    public function getRetweets(): Collection
+    {
+        return $this->retweets;
+    }
+
+    public function addRetweet(Retweet $retweet): static
+    {
+        if (!$this->retweets->contains($retweet)) {
+            $this->retweets->add($retweet);
+            $retweet->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRetweet(Retweet $retweet): static
+    {
+        if ($this->retweets->removeElement($retweet)) {
+            // set the owning side to null (unless already changed)
+            if ($retweet->getUser() === $this) {
+                $retweet->setUser(null);
+            }
+        }
 
         return $this;
     }
