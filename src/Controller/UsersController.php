@@ -15,42 +15,66 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/users')]
 final class UsersController extends AbstractController
 {
-    #[Route('/{id}', name: 'app_users_show', methods: ['GET'])]
-    public function show(Users $user): Response
+    #[Route('/profile', name: 'app_profile', methods: ['GET'])]
+    public function profile(EntityManagerInterface $entityManager): Response
     {
-        return $this->render('users/show.html.twig', [
+        // Récupérer l'utilisateur connecté
+        $user = $this->getUser();
+
+        // Si l'utilisateur n'est pas connecté, rediriger vers la page de login
+        if (!$user) {
+            return $this->redirectToRoute('app_login');
+        }
+
+        // Récupérer les tweets de l'utilisateur
+        $tweets = $entityManager
+            ->getRepository(Tweets::class)
+            ->findBy(['user' => $user], ['createdAt' => 'DESC']);
+
+        return $this->render('users/profile.html.twig', [
             'user' => $user,
+            'tweets' => $tweets,
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_users_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Users $user, EntityManagerInterface $entityManager): Response
+
+    #[Route('/profile/edit', name: 'app_profile_edit', methods: ['GET', 'POST'])]
+    public function editProfile(Request $request, EntityManagerInterface $entityManager): Response
     {
+        // Récupérer l'utilisateur connecté
+        $user = $this->getUser();
+
+        if (!$user) {
+            return $this->redirectToRoute('app_login');
+        }
+
+        // Créer le formulaire d'édition
         $form = $this->createForm(UsersType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
-
-            return $this->redirectToRoute('app_users_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_profile');
         }
 
-        return $this->render('users/edit.html.twig', [
-            'user' => $user,
-            'form' => $form,
+        return $this->render('users/edit_profile.html.twig', [
+            'form' => $form->createView(),
         ]);
     }
 
-    #[Route('/{id}', name: 'app_users_delete', methods: ['POST'])]
-    public function delete(Request $request, Users $user, EntityManagerInterface $entityManager): Response
+    #[Route('/profile/tweet/{id}/delete', name: 'app_tweet_delete', methods: ['POST'])]
+    public function deleteTweet(Request $request, Tweets $tweet, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->getPayload()->getString('_token'))) {
-            $entityManager->remove($user);
+        // Vérifier que l'utilisateur est le propriétaire du tweet
+        if ($this->getUser() !== $tweet->getUser()) {
+            return $this->redirectToRoute('app_profile');
+        }
+
+        if ($this->isCsrfTokenValid('delete'.$tweet->getId(), $request->get('_token'))) {
+            $entityManager->remove($tweet);
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('app_users_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_profile');
     }
-
-  
 }
