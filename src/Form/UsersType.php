@@ -3,7 +3,9 @@
 namespace App\Form;
 
 use App\Entity\Users;
+use PhpParser\Node\Stmt\Label;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -16,11 +18,16 @@ class UsersType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('username')
-            ->add('email', EmailType::class)
+            ->add('username', TextType::class,[
+                'Label' => 'Nom d\'utilisateur',
+                ])
+            ->add('email', EmailType::class, [
+                'Label' => 'Email',
+            ])
             ->add('Password', PasswordType::class, [
                 // instead of being set onto the object directly,
                 // this is read and encoded in the controller
+                'Label' => 'Nouveau mot de passe',
                 'attr' => ['autocomplete' => 'new-password'],
                 'constraints' => [
                     new NotBlank([

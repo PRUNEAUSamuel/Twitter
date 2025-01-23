@@ -6,11 +6,13 @@ use App\Entity\Users;
 use App\Form\UsersType;
 use App\Repository\UsersRepository;
 use App\Entity\Tweets;
+use App\Form\TweetsType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+
 
 #[Route('/users')]
 final class UsersController extends AbstractController
@@ -37,7 +39,7 @@ final class UsersController extends AbstractController
         ]);
     }
 
-
+    // Modifier les informations du profil de l'utilisateur
     #[Route('/profile/edit', name: 'app_profile_edit', methods: ['GET', 'POST'])]
     public function editProfile(Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -62,6 +64,14 @@ final class UsersController extends AbstractController
         ]);
     }
 
+//     #[Route('/profile/delete', name: 'app_profile_delete', methods: ['POST'])]
+//     public function delete(Request $request, Users $user, EntityManagerInterface $entityManager): Response
+
+//   {
+
+//   }
+
+    // Supprimer un tweet
     #[Route('/profile/tweet/{id}/delete', name: 'app_tweet_delete', methods: ['POST'])]
     public function deleteTweet(Request $request, Tweets $tweet, EntityManagerInterface $entityManager): Response
     {
@@ -77,4 +87,54 @@ final class UsersController extends AbstractController
 
         return $this->redirectToRoute('app_profile');
     }
+
+    // Ajouter un tweet
+    #[Route('/profile/tweet/new', name: 'app_tweet_new', methods: ['GET', 'POST'])]
+    public function newTweet(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $tweet = new Tweets();
+        $tweet->setUser($this->getUser()); // Lier le tweet à l'utilisateur connecté
+
+        $form = $this->createForm(TweetsType::class, $tweet);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($tweet);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_profile');
+        }
+
+        return $this->render('tweets/new.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    // Modifier un tweet
+    #[Route('/profile/tweet/{id}/edit', name: 'app_tweet_edit', methods: ['GET', 'POST'])]
+    public function editTweet(Request $request, Tweets $tweet, EntityManagerInterface $entityManager): Response
+    {
+        // Vérifier que l'utilisateur est le propriétaire du tweet
+        if ($this->getUser() !== $tweet->getUser()) {
+            return $this->redirectToRoute('app_profile');
+        }
+
+        $form = $this->createForm(TweetsType::class, $tweet);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
+            return $this->redirectToRoute('app_profile');
+        }
+
+        return $this->render('tweets/edit.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+  
 }
+
+
+
+
+
