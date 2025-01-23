@@ -18,7 +18,7 @@ class Contents
     private ?string $content = null;
 
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
-    private ?tweets $tweet = null;
+    private ?Tweets $tweet = null;
 
     public function getId(): ?int
     {
@@ -37,12 +37,12 @@ class Contents
         return $this;
     }
 
-    public function getTweet(): ?tweets
+    public function getTweet(): ?Tweets
     {
         return $this->tweet;
     }
 
-    public function setTweet(?tweets $tweet): static
+    public function setTweet(?Tweets $tweet): static
     {
         $this->tweet = $tweet;
 

@@ -64,6 +64,7 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
         $this->updatedAt = new \DateTimeImmutable();
         $this->tweets = new ArrayCollection();
         $this->likes = new ArrayCollection();
+        $this->roles = $this->getRoles();
     }
 
     public function getId(): ?int
