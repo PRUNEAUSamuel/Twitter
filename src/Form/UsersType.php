@@ -12,6 +12,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\EqualTo;
 
 class UsersType extends AbstractType
 {
@@ -19,15 +20,17 @@ class UsersType extends AbstractType
     {
         $builder
             ->add('username', TextType::class,[
-                'Label' => 'Nom d\'utilisateur',
+                'label' => 'Nom d\'utilisateur',
                 ])
             ->add('email', EmailType::class, [
-                'Label' => 'Email',
+                'label' => 'Email',
+                'required' => false,
             ])
-            ->add('Password', PasswordType::class, [
+            ->add('password', PasswordType::class, [
                 // instead of being set onto the object directly,
                 // this is read and encoded in the controller
-                'Label' => 'Nouveau mot de passe',
+                'label' => 'Nouveau mot de passe',
+                'required' => false,
                 'attr' => ['autocomplete' => 'new-password'],
                 'constraints' => [
                     new NotBlank([
@@ -40,8 +43,23 @@ class UsersType extends AbstractType
                         'max' => 4096,
                     ]),
                 ],
-            ])
-        ;
+            ]);
+            // ->add('Confirm_password', PasswordType::class, [
+            //     'label' => 'Confirmer le mot de passe',
+            //     'mapped' => false,
+            //     'required'=> false,
+            //     'attr' => ['autocomplete' => 'new-password'],
+            //     'constraints' => [
+            //         new EqualTo([
+            //             'propertyPath' => 'password', 
+            //             'message' => 'Le mots de passe ne correspond pas'
+            //         ])
+            //         ],
+            // //     'validation_groups' => function($form) {
+            // //     $password = $form->get('password')->getData();
+            // //     return $password ? ['Default'] : [];
+            // // },
+            // ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

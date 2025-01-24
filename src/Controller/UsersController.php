@@ -12,6 +12,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 
 #[Route('/users')]
@@ -41,27 +42,42 @@ final class UsersController extends AbstractController
 
     // Modifier les informations du profil de l'utilisateur
     #[Route('/profile/edit', name: 'app_profile_edit', methods: ['GET', 'POST'])]
-    public function editProfile(Request $request, EntityManagerInterface $entityManager): Response
+    public function editProfile(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
     {
         // Récupérer l'utilisateur connecté
         $user = $this->getUser();
 
+        
         if (!$user) {
             return $this->redirectToRoute('app_login');
         }
+       
 
+        
         // Créer le formulaire d'édition
         $form = $this->createForm(UsersType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+           $newPassword = $form->get('password')->getData();
+           if (!$user instanceof Users) {
+            throw new \Exception('L\'utilisateur récupéré n\'est pas valide');
+            }
+         
+            if($newPassword){
+            
+                $user->setPassword($passwordHasher->hashPassword($user, $newPassword));
+            }
             $entityManager->flush();
-            return $this->redirectToRoute('app_profile');
-        }
 
-        return $this->render('users/edit_profile.html.twig', [
+            $this->addFlash('success', 'Votre profil a été mis a jour avec succès.');
+            return $this->redirectToRoute('app_profile');
+        
+        }
+            return $this->render('users/edit_profile.html.twig', [
             'form' => $form->createView(),
-        ]);
+            ]);
+         
     }
 
 //     #[Route('/profile/delete', name: 'app_profile_delete', methods: ['POST'])]

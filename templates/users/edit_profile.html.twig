@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Modifier votre profil</h1>
+    {% for label, messages in app.flashes %}
+        <div>
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %} 
+        </div>
+    {% endfor %}           
+    <div>
+        {{ form_start(form) }}
+        <div>
+            {{ form_label(form.username) }}
+            {{ form_widget(form.username, ) }}
+            <div>
+                {{ form_errors(form.username) }}
+                
+            </div>
+        </div>
+
+        <div>
+            {{ form_label(form.email) }}
+            {{ form_widget(form.email) }}
+            <div>
+                {{ form_errors(form.email) }}
+        </div>
+        <div>
+            {{ form_label(form.password) }}
+            {{ form_widget(form.password) }}
+            <div>
+                {{ form_errors(form.password) }}
+            </div>
+        </div>
+
+        {# <div>
+            {{ form_label(form.Confirm_password) }}
+            {{ form_widget(form.Confirm_password) }}
+            <div>
+            {{ form_errors(form.Confirm_password)}}
+            </div>
+        </div> #}
+
+        <button type="submit"> Mettre a jours </button>
+
+        {{ form_end(form) }}
+    </div>
+
+    {% endblock %}

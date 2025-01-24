@@ -8,7 +8,11 @@
             <h3>Informations personnelles</h3>
             <p><strong>Nom :</strong> {{ user.username }}</p>
             <p><strong>Email :</strong> {{ user.email }}</p>
-            {# Ajouter d'autres informations personnelles si nécessaire #}
+
+            <div class="edit_profile">
+                <a href="{{ path('app_profile_edit') }}">Modifier mon profile</a>
+            </div>
+
         </div>
 
         <div class="tweets-section">
