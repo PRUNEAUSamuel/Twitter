@@ -69,7 +69,23 @@ public function editTweet(Request $request, Tweets $tweet, EntityManagerInterfac
 }
 
 
-// Supprimer un tweet
+
+
+//Confirmation de la suppression d'un tweet
+
+#[Route('/profile/tweet/{id}/confirm-delete', name:'app_tweet_confirm_delete', methods:['GET'])]
+
+public function confirmDelete(Tweets $tweet) : Response {
+
+    if ($this->getUser() !== $tweet->getUser()){
+        return $this->redirectToRoute('app_profile');
+    }
+
+    return $this->render('tweets/confirm_delete.html.twig', ['tweet' => $tweet]);
+
+}
+
+// Supprimer un tweet après confirmation 
 #[Route('/profile/tweet/{id}/delete', name: 'app_tweet_delete', methods: ['POST'])]
 public function deleteTweet(Request $request, Tweets $tweet, EntityManagerInterface $entityManager): Response
 {

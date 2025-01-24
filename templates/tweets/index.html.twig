@@ -1,34 +1,47 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Tweets index{% endblock %}
+{% block title %}Accueil{% endblock %}
 
 {% block body %}
-    <h1>Tweets index</h1>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Tweet</th>
-                <th>Auteur</th>
-                <th>Créé le</th>
-                <th>Modifié le</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for tweet in tweets %}
+
+
+
+        {# <th>Tweet</th>
+        <th>Auteur</th>
+        <th>Créé le</th> #}
+        {# <th>Modifié le</th> #}
+
+{% for tweet in tweets %}
+
+<div class="border border-1 m-2 p-2">
+<span>{{ tweet.user.username }} - {{ tweet.createdAt ? tweet.createdAt|date('d/m/Y H:i:s') : '' }}</span>
+<p class="text-center">{{ tweet.content }}</p>
+</div>
+
+
+
+{# <td>{{ tweet.updateAt ? tweet.updateAt|date('Y-m-d H:i:s') : '' }}</td> #}
+{% else %}
+<span=>no records found </span>
+
+{% endfor %}
+
+
+
+        {# {% for tweet in tweets %}
             <tr>
                 <td>{{ tweet.content }}</td>
                 <td>{{ tweet.user.username }}</td>
                 <td>{{ tweet.createdAt ? tweet.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ tweet.updateAt ? tweet.updateAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
+                {# <td>{{ tweet.updateAt ? tweet.updateAt|date('Y-m-d H:i:s') : '' }}</td> #}
+            {# </tr>
         {% else %}
             <tr>
                 <td colspan="5">no records found</td>
             </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+        {% endfor %} #} 
+
 
     <a href="{{ path('app_tweet_new') }}">Create new</a>
 {% endblock %}
