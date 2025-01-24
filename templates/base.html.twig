@@ -14,24 +14,30 @@
             {% block importmap %}{{ importmap('app') }}{% endblock %}
         {% endblock %}
     </head>
-    <body data-bs-theme="dark-oled">
-        <nav class="navbar navbar-expand-lg bg-body-tertiary bg-black">
+    <body data-bs-theme="dark-oled" class="text-white">
+        <nav class="navbar navbar-expand-lg bg-black border-bottom border-secondary">
             <div class="container-fluid">
-                <div id="navbarSupportedContent">
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="{{ path('app_tweets_index') }}">Home</a>
+                        <li class="nav-item mx-3">
+                            <a class="nav-link active text-white" aria-current="page" href="{{ path('app_tweets_index') }}">Accueil</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ path('app_profile') }}">Profile</a>
+                        <li class="nav-item mx-3">
+                            <a class="nav-link text-white" href="{{ path('app_profile') }}">Profil</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ path('app_tweet_new') }}">Post</a>
+                        <li class="nav-item mx-3">
+                            <a class="nav-link text-white" href="{{ path('app_tweet_new') }}">Publier</a>
+                        </li>
+                        <li class="nav-item mx-3">
+                            <a class="nav-link text-white" href="{{ path('app_logout') }}">Déconnexion</a>
                         </li>
                     </ul>
                     <form class="d-flex" role="search">
-                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                        <button class="btn btn-outline-success" type="submit">Search</button>
+                        <div class="form-floating mx-1">
+                            <input type="search" class="form-control me-2 border-secondary text-white" id="floatingSearch" placeholder="" aria-label="Search">
+                            <label for="floatingSearch">Mot clé</label>
+                        </div>
+                        <button class="btn btn-outline-success" type="submit">Rechercher</button>
                     </form>
                 </div>
             </div>
