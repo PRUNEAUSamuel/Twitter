@@ -6,6 +6,15 @@
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
         {% block stylesheets %}
             <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+            <style>
+                label:focus {
+                    border-color: white;
+                    box-shadow: 0 0 5px rgba(13, 110, 253, 0.5);
+                    outline: none;
+                }
+
+
+            </style>
         {% endblock %}
 
         {% block javascripts %}
@@ -13,38 +22,29 @@
             {% block importmap %}{{ importmap('app') }}{% endblock %}
         {% endblock %}
     </head>
-    <body>
+    <body class="bg-black text-white">
     {% block body %}
-        <form method="post">
+        <form method="post" class="container w-50 p-3">
             {% if error %}
                 <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
             {% endif %}
-
-            <h1 class="h3 mb-3 font-weight-normal">Login</h1>
-            <label for="username">Username</label>
-            <input type="text" value="{{ last_username }}" name="_username" id="username" class="form-control" autocomplete="username" required autofocus>
-            <label for="password">Password</label>
-            <input type="password" name="_password" id="password" class="form-control" autocomplete="current-password" required>
-
-            <input type="hidden" name="_csrf_token"
-                value="{{ csrf_token('authenticate') }}"
-            >
-
-            {#
-                Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
-                See https://symfony.com/doc/current/security/remember_me.html
-
-                <div class="checkbox mb-3">
-                    <input type="checkbox" name="_remember_me" id="_remember_me">
-                    <label for="_remember_me">Remember me</label>
-                </div>
-            #}
-
-            <button class="btn btn-lg btn-primary" type="submit">
-                Login
-            </button>
+            <h1 class="h3 my-5 text-center text-white fw-bold">Connectez-vous à notre X</h1>
+            <div class="form-floating my-3">
+                <input name="_username" type="text" class="form-control border-secondary bg-black text-white" id="floatingInput" placeholder="">
+                <label class="label" for="floatingInput">Nom d'utilisateur</label>
+            </div>
+            <div class="form-floating my-3">
+                <input name="_password" type="password" class="form-control border-secondary bg-black text-white" id="floatingPassword" placeholder="">
+                <label for="floatingPassword">Mot de passe</label>
+            </div>
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+            <div class="d-grid gap-2 mx-auto my-4">
+                <button class="btn btn-light text-black fw-bold my-2" type="submit">Se connecter</button>
+                <p class="text-center">Vous n'avez pas de compte ?
+                    <a  href="{{ path('app_register') }}">Inscrivez-vous</a>
+                </p>
+            </div>
         </form>
-        <a href="{{ path('app_register') }}">Register</a>
     {% endblock %}
     </body>
 </html>
