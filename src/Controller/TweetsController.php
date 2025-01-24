@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
+
 #[Route('/tweets')]
 final class TweetsController extends AbstractController{
     #[Route(name: 'app_tweets_index', methods: ['GET'])]
@@ -21,60 +22,85 @@ final class TweetsController extends AbstractController{
         ]);
     }
 
-    #[Route('/new', name: 'app_tweets_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
-    {
-        $tweet = new Tweets();
-        $form = $this->createForm(TweetsType::class, $tweet);
-        $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($tweet);
-            $entityManager->flush();
 
-            return $this->redirectToRoute('app_tweets_index', [], Response::HTTP_SEE_OTHER);
-        }
+// Ajouter un tweet
+#[Route('/profile/tweet/new', name: 'app_tweet_new', methods: ['GET', 'POST'])]
+public function newTweet(Request $request, EntityManagerInterface $entityManager): Response
+{
+    $tweet = new Tweets();
+    $tweet->setUser($this->getUser()); // Lier le tweet à l'utilisateur connecté
 
-        return $this->render('tweets/new.html.twig', [
-            'tweet' => $tweet,
-            'form' => $form,
-        ]);
+    $form = $this->createForm(TweetsType::class, $tweet);
+    $form->handleRequest($request);
+
+    if ($form->isSubmitted() && $form->isValid()) {
+        $entityManager->persist($tweet);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_tweets_index');
     }
 
-    #[Route('/{id}', name: 'app_tweets_show', methods: ['GET'])]
-    public function show(Tweets $tweet): Response
-    {
-        return $this->render('tweets/show.html.twig', [
-            'tweet' => $tweet,
-        ]);
-    }
-
-    #[Route('/{id}/edit', name: 'app_tweets_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Tweets $tweet, EntityManagerInterface $entityManager): Response
-    {
-        $form = $this->createForm(TweetsType::class, $tweet);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_tweets_index', [], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->render('tweets/edit.html.twig', [
-            'tweet' => $tweet,
-            'form' => $form,
-        ]);
-    }
-
-    #[Route('/{id}', name: 'app_tweets_delete', methods: ['POST'])]
-    public function delete(Request $request, Tweets $tweet, EntityManagerInterface $entityManager): Response
-    {
-        if ($this->isCsrfTokenValid('delete'.$tweet->getId(), $request->getPayload()->getString('_token'))) {
-            $entityManager->remove($tweet);
-            $entityManager->flush();
-        }
-
-        return $this->redirectToRoute('app_tweets_index', [], Response::HTTP_SEE_OTHER);
-    }
+    return $this->render('tweets/new.html.twig', [
+        'form' => $form->createView(),
+    ]);
 }
+
+// Modifier un tweet
+#[Route('/profile/tweet/{id}/edit', name: 'app_tweet_edit', methods: ['GET', 'POST'])]
+public function editTweet(Request $request, Tweets $tweet, EntityManagerInterface $entityManager): Response
+{
+    // Vérifier que l'utilisateur est le propriétaire du tweet
+    if ($this->getUser() !== $tweet->getUser()) {
+        return $this->redirectToRoute('app_profile');
+    }
+
+    $form = $this->createForm(TweetsType::class, $tweet);
+    $form->handleRequest($request);
+
+    if ($form->isSubmitted() && $form->isValid()) {
+        $entityManager->flush();
+        return $this->redirectToRoute('app_tweets_index');
+    }
+
+    return $this->render('tweets/edit.html.twig', [
+        'form' => $form->createView(),
+    ]);
+}
+
+
+
+
+//Confirmation de la suppression d'un tweet
+
+#[Route('/profile/tweet/{id}/confirm-delete', name:'app_tweet_confirm_delete', methods:['GET'])]
+
+public function confirmDelete(Tweets $tweet) : Response {
+
+    if ($this->getUser() !== $tweet->getUser()){
+        return $this->redirectToRoute('app_profile');
+    }
+
+    return $this->render('tweets/confirm_delete.html.twig', ['tweet' => $tweet]);
+
+}
+
+// Supprimer un tweet après confirmation 
+#[Route('/profile/tweet/{id}/delete', name: 'app_tweet_delete', methods: ['POST'])]
+public function deleteTweet(Request $request, Tweets $tweet, EntityManagerInterface $entityManager): Response
+{
+    // Vérifier que l'utilisateur est le propriétaire du tweet
+    if ($this->getUser() !== $tweet->getUser()) {
+        return $this->redirectToRoute('app_profile');
+    }
+
+    if ($this->isCsrfTokenValid('delete'.$tweet->getId(), $request->get('_token'))) {
+        $entityManager->remove($tweet);
+        $entityManager->flush();
+    }
+
+    return $this->redirectToRoute('app_profile');
+}
+
+}
+

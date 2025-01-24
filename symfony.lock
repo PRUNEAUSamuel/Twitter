@@ -227,7 +227,7 @@
             "repo": "github.com/symfony/recipes",
             "branch": "main",
             "version": "2.20",
-            "ref": "c43fba777f20ef04a03c5112752a0d7b156bec5e"
+            "ref": "3acc494b566816514a6873a89023a35440b6386d"
         },
         "files": [
             "./assets/bootstrap.js",
