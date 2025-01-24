@@ -1,37 +1,40 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Tweets index{% endblock %}
+{% block title %}Twitter > X
+{% endblock %}
 
 {% block body %}
-    <h1>Tweets index</h1>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>CreatedAt</th>
-                <th>UpdateAt</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for tweet in tweets %}
-            <tr>
-                <td>{{ tweet.id }}</td>
-                <td>{{ tweet.createdAt ? tweet.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ tweet.updateAt ? tweet.updateAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>
-                    <a href="{{ path('app_tweets_show', {'id': tweet.id}) }}">show</a>
-                    <a href="{{ path('app_tweets_edit', {'id': tweet.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="4">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+	<main class="m-2">
+		<section class="border border-1 border-secondary rounded m-2 p-2 text-center">
+			<a class="text-decoration-none text-white" href="{{path('app_tweets_index')}}"><h2>Twitter > X</h2></a>
+		</section>
 
-    <a href="{{ path('app_tweets_new') }}">Create new</a>
+		<section class="border border-1 m-2 p-2 text-center">
+			<a class="text-decoration-none text-white" href="{{ path('app_tweet_new') }}">Poster un Tweet</a>
+		</section>
+
+		<section>
+			{% if tweets is empty %}
+				<div class="border border-1 m-2 p-2">
+					<span>Aucun Tweet pour le moment ! N'hésites pas à en faire un !
+					</span>
+				</div>
+			{% else %}
+				{% for tweet in tweets %}
+					<div class="border border-1 m-2 p-2">
+						<span>
+							{{ tweet.user.username }}
+							-
+							{{ tweet.createdAt ? tweet.createdAt|date('d/m/Y H:i:s') : '' }}
+						{# - #}
+							{# {{ tweet.updateAt ? tweet.updateAt|date('Y-m-d H:i:s') : '' }} #}
+						</span>
+						<p class="text-center">{{ tweet.content }}</p>
+					</div>
+				{% endfor %}
+			{% endif %}
+		</section>
+	</main>
+
 {% endblock %}

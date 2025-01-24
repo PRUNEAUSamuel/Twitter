@@ -27,8 +27,7 @@ class Tweets
     #[ORM\JoinColumn(nullable: false)]
     private ?Users $user = null;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
-    private ?Contents $content = null;
+    
 
     /**
      * @var Collection<int, Likes>
@@ -36,9 +35,18 @@ class Tweets
     #[ORM\OneToMany(targetEntity: Likes::class, mappedBy: 'tweet')]
     private Collection $likes;
 
+    #[ORM\Column(length: 255)]
+    private ?string $content = null;
+
+
+
+
+
     public function __construct()
     {
         $this->likes = new ArrayCollection();
+        $this->createdAt = new \DateTimeImmutable();
+        $this->updateAt = new \DateTimeImmutable();
     }
 
     public function getId(): ?int
@@ -82,12 +90,12 @@ class Tweets
         return $this;
     }
 
-    public function getContent(): ?Contents
+    public function getContent(): ?string
     {
         return $this->content;
     }
 
-    public function setContent(?Contents $content): static
+    public function setContent(?string $content): static
     {
         $this->content = $content;
 

@@ -2,39 +2,39 @@
 
 namespace App\Repository;
 
-use App\Entity\Contents;
+use App\Entity\Retweet;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Contents>
+ * @extends ServiceEntityRepository<Retweet>
  */
-class ContentsRepository extends ServiceEntityRepository
+class RetweetRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Contents::class);
+        parent::__construct($registry, Retweet::class);
     }
 
 //    /**
-//     * @return Contents[] Returns an array of Contents objects
+//     * @return Retweet[] Returns an array of Retweet objects
 //     */
 //    public function findByExampleField($value): array
 //    {
-//        return $this->createQueryBuilder('c')
-//            ->andWhere('c.exampleField = :val')
+//        return $this->createQueryBuilder('r')
+//            ->andWhere('r.exampleField = :val')
 //            ->setParameter('val', $value)
-//            ->orderBy('c.id', 'ASC')
+//            ->orderBy('r.id', 'ASC')
 //            ->setMaxResults(10)
 //            ->getQuery()
 //            ->getResult()
 //        ;
 //    }
 
-//    public function findOneBySomeField($value): ?Contents
+//    public function findOneBySomeField($value): ?Retweet
 //    {
-//        return $this->createQueryBuilder('c')
-//            ->andWhere('c.exampleField = :val')
+//        return $this->createQueryBuilder('r')
+//            ->andWhere('r.exampleField = :val')
 //            ->setParameter('val', $value)
 //            ->getQuery()
 //            ->getOneOrNullResult()
