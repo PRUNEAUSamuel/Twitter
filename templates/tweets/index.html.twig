@@ -15,7 +15,7 @@
 
 		</section>
 
-		<section class="border border-1 border-secondary text-center">
+		<section class="border border-1 border-secondary text-center p-2">
 			<a class="text-decoration-none text-white" href="{{ path('app_tweet_new') }}">Poster un Tweet</a>
 		</section>
 
@@ -27,15 +27,15 @@
 				</div>
 			{% else %}
 				{% for tweet in tweets %}
-					<div class="border border-1 border-secondary">
-						<span class="text-start">
+					<div class="border border-1 border-secondary p-2">
+						<span>
 							{{ tweet.user.username }}
 							-
 							{{ tweet.createdAt ? tweet.createdAt|date('d/m/Y H:i:s') : '' }}
-						{# - #}
-							{# {{ tweet.updateAt ? tweet.updateAt|date('Y-m-d H:i:s') : '' }} #}
+													
+							{# {{ tweet.updateAt ? tweet.updateAt|date('d/m/Y H:i:s') : '' }} #}
 						</span>
-						<p class="text-center">{{ tweet.content }}</p>
+						<p class="p-2">{{ tweet.content }}</p>
 					</div>
 				{% endfor %}
 			{% endif %}
