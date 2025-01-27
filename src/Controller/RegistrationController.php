@@ -33,6 +33,15 @@ class RegistrationController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
+            $existingUsername = $entityManager->getRepository(Users::class)->findOneBy(["username" => $user->getUsername()]);
+
+            if($existingUsername) {
+                $form->addError(new FormError("Cet username est déjà utilisé."));
+                return $this->render('registration/register.html.twig', [
+                    'registrationForm' => $form,
+                ]);
+            }
+
             $existingUser = $entityManager->getRepository(Users::class)->findOneBy(["email" => $user->getEmail()]);
 
             if($existingUser) {

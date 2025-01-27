@@ -8,10 +8,16 @@
             <div class="form-floating my-3">
                 {{ form_widget(registrationForm.username) }}
                 {{ form_label(registrationForm.username) }}
+                <div class="text-danger">
+                    {{ form_errors(registrationForm.username) }}
+                </div>
             </div>
             <div class="form-floating my-3">
                 {{ form_widget(registrationForm.email) }}
                 {{ form_label(registrationForm.email) }}
+                <div class="text-danger">
+                    {{ form_errors(registrationForm.email) }}
+                </div>
             </div>
             <div class="form-floating my-3">
                 {{ form_widget(registrationForm.plainPassword) }}
