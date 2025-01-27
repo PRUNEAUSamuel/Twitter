@@ -18,9 +18,9 @@
         <nav class="navbar navbar-expand-lg bg-black border-bottom border-secondary">
             <div class="container-fluid">
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0 fw-bold">
                         <li class="nav-item mx-3">
-                            <a class="nav-link active text-white" aria-current="page" href="{{ path('app_tweets_index') }}">Accueil</a>
+                            <a class="nav-link text-white" href="{{ path('app_tweets_index') }}">Accueil</a>
                         </li>
                         <li class="nav-item mx-3">
                             <a class="nav-link text-white" href="{{ path('app_profile') }}">Profil</a>
@@ -29,7 +29,11 @@
                             <a class="nav-link text-white" href="{{ path('app_tweet_new') }}">Publier</a>
                         </li>
                         <li class="nav-item mx-3">
-                            <a class="nav-link text-white" href="{{ path('app_logout') }}">Déconnexion</a>
+                            {% if app.user %}
+                                <a class="nav-link text-white" href="{{ path('app_logout') }}">Déconnexion</a>
+                            {% else %}
+                                <a class="nav-link text-white" href="{{ path('app_login') }}">Connexion</a>
+                            {% endif %}
                         </li>
                     </ul>
                     <form class="d-flex" role="search">
