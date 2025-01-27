@@ -19,7 +19,7 @@ final class TweetsController extends AbstractController{
     public function index(TweetsRepository $tweetsRepository): Response
     {
         return $this->render('tweets/index.html.twig', [
-            'tweets' => $tweetsRepository->findAll(),
+            'tweets' => $tweetsRepository->findBy([],['createdAt'=>'DESC']),
         ]);
     }
 

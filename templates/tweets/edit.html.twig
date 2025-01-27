@@ -3,10 +3,15 @@
 {% block title %}Edit Tweets{% endblock %}
 
 {% block body %}
-    <h1>Edit Tweets</h1>
 
-    {{ include('tweets/_form.html.twig', {'button_label': 'Update'}) }}
 
-    <a href="{{ path('app_tweets_index') }}">back to list</a>
+<main class="d-flex flex-column justify-content-center align-items-center mt-5 text-center">
+
+    <h1 class="m-5 p-5"> ⇩ Modifier votre tweet ici ⇩</h1>
+
+    {{ include('tweets/_form.html.twig', {'button_label': 'Valider la modification'}) }}
+
+</main>
+
 
 {% endblock %}
