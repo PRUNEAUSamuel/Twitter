@@ -30,7 +30,7 @@
                             {# Boutons pour modifier ou supprimer un tweet #}
                             <a href="{{ path('app_tweet_edit', {'id': tweet.id}) }}" class="btn btn-warning">Modifier</a>
 
-                            <form method="post" action="{{ path('app_tweet_delete', {'id': tweet.id}) }}" style="display:inline;">
+                            <form method="get" action="{{ path('app_tweet_confirm_delete', {'id': tweet.id}) }}" style="display:inline;">
                                 <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ tweet.id) }}">
                                 <button type="submit" class="btn btn-danger">Supprimer</button>
                             </form>
