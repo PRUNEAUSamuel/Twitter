@@ -6,17 +6,26 @@
 
 <main class="d-flex flex-column justify-content-center align-items-center mt-5 text-center">
 
+
+<section class="m-3">
 <h2>Êtes-vous sûr de vouloir supprimer ce tweet ?</h2>
+</section>
 
-<p>Contenu du tweet : {{tweet.content}}</p>
-<p>Publié le : {{tweet.createdAt|date('d/m/Y H:i')}}</p>
+<section>
+<hr>
+<p>{{tweet.content}}</p>
+<p><small>Publié le : {{tweet.createdAt|date('d/m/Y H:i')}}</small></p>
+<hr>
+</section>
 
+<section>
 <form method="post" action="{{ path('app_tweet_delete', {'id': tweet.id}) }}">
     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ tweet.id) }}">
-    <button type= submit class="btn btn-danger">Oui, Supprimer</button>
+    <button type= submit class="btn btn-danger m-4">Oui, Supprimer</button>
 </form>
-
 <a href="{{path('app_profile') }}" class="btn btn-secondary">Annuler</a>
+</section>
+
 
 
 
