@@ -11,7 +11,7 @@
             {# Ajouter d'autres informations personnelles si nécessaire #}
         </div>
 
-        <div class="tweets-section">
+        <div class="tweets-section d-flex flex-column justify-content-center align-items-center">
             <h3>Mes Tweets</h3>
 
             {% if tweets is empty %}
@@ -20,15 +20,20 @@
                 <ul>
                     {% for tweet in tweets %}
                         <li>
-                            <p>{{ tweet.content }}</p>
+                            
                             <p><small>Publié le {{ tweet.createdAt|date('d/m/Y H:i') }}</small></p>
+                            <p>{{ tweet.content }}</p>
 
+
+                            <div class="d-flex justify-content-end align-items-center" >
                             {# Boutons pour modifier ou supprimer un tweet #}
-                            <a href="{{ path('app_tweet_edit', {'id': tweet.id}) }}" class="btn btn-warning">Modifier</a>
+                            <a href="{{ path('app_tweet_edit', {'id': tweet.id}) }}" class="btn btn-secondary">Modifier mon tweet</a>
 
                             <form method="get" action="{{ path('app_tweet_confirm_delete', {'id': tweet.id}) }}" style="display:inline;">
                                 <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ tweet.id) }}">
-                                <button type="submit" class="btn btn-danger">Supprimer</button>
+                                <button type="submit" class="btn btn-secondary">Supprimer mon tweet</button>
+                            </div>
+                            
                             </form>
                         </li>
                     {% endfor %}
