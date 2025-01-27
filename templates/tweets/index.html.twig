@@ -4,32 +4,37 @@
 
 {% block body %}
 
-	<main class="m-2">
-		<section class="border border-1 border-secondary rounded m-2 p-2 text-center">
-			<a class="text-decoration-none text-white" href="{{path('app_tweets_index')}}"><h2>Twitter > X</h2></a>
+	<main class="w-50  mx-auto">
+
+		<section class="border border-1 border-secondary text-center p-5">
+
+			<a class="text-decoration-none text-white" href="{{path('app_tweets_index')}}">
+				<h2>Twitter > X</h2>
+			</a>
+
 		</section>
 
-		<section class="border border-1 m-2 p-2 text-center">
+		<section class="border border-1 border-secondary text-center p-2">
 			<a class="text-decoration-none text-white" href="{{ path('app_tweet_new') }}">Poster un Tweet</a>
 		</section>
 
 		<section>
 			{% if tweets is empty %}
-				<div class="border border-1 m-2 p-2">
+				<div class="border border-1 border-secondary text-center">
 					<span>Aucun Tweet pour le moment ! N'hésites pas à en faire un !
 					</span>
 				</div>
 			{% else %}
 				{% for tweet in tweets %}
-					<div class="border border-1 m-2 p-2">
+					<div class="border border-1 border-secondary p-2">
 						<span>
 							{{ tweet.user.username }}
 							-
 							{{ tweet.createdAt ? tweet.createdAt|date('d/m/Y H:i:s') : '' }}
-						{# - #}
-							{# {{ tweet.updateAt ? tweet.updateAt|date('Y-m-d H:i:s') : '' }} #}
+													
+							{# {{ tweet.updateAt ? tweet.updateAt|date('d/m/Y H:i:s') : '' }} #}
 						</span>
-						<p class="text-center">{{ tweet.content }}</p>
+						<p class="p-2">{{ tweet.content }}</p>
 					</div>
 				{% endfor %}
 			{% endif %}

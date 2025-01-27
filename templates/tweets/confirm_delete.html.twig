@@ -4,6 +4,8 @@
 
 {% block body %}
 
+<main class="d-flex flex-column justify-content-center align-items-center mt-5 text-center">
+
 <h2>Êtes-vous sûr de vouloir supprimer ce tweet ?</h2>
 
 <p>Contenu du tweet : {{tweet.content}}</p>
@@ -15,6 +17,12 @@
 </form>
 
 <a href="{{path('app_profile') }}" class="btn btn-secondary">Annuler</a>
+
+
+
+</main>
+
+
 
 
 

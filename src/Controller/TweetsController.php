@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Core\Security;
 
 
 #[Route('/tweets')]
@@ -18,7 +19,7 @@ final class TweetsController extends AbstractController{
     public function index(TweetsRepository $tweetsRepository): Response
     {
         return $this->render('tweets/index.html.twig', [
-            'tweets' => $tweetsRepository->findAll(),
+            'tweets' => $tweetsRepository->findBy([],['createdAt'=>'DESC']),
         ]);
     }
 
