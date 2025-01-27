@@ -129,6 +129,7 @@ final class UsersController extends AbstractController
 
             $entityManager->persist($user);
             $entityManager->flush();
+            
             $this->addFlash('success', 'Votre profil a été mis à jours.');
             return $this->redirectToRoute('app_profile');
         //    $newPassword = $form->get('password')->getData();
