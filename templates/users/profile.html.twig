@@ -1,81 +1,66 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-<div class="profile-container">
-        <h2>Profil de {{ user.username }}</h2>
 
-        <div class="user-info">
-            <h3>Informations personnelles</h3>
-            <p><strong>Nom :</strong> {{ user.username }}</p>
-            <p><strong>Email :</strong> {{ user.email }}</p>
-            {# Ajouter d'autres informations personnelles si nécessaire #}
-        </div>
+	<div class="profile-container">
+		<h2>Profil de
+			{{ user.username }}</h2>
 
-        <div class="tweets-section d-flex flex-column justify-content-center align-items-center">
-            <h3>Mes Tweets</h3>
-
-            {% if tweets is empty %}
-                <p>Vous n'avez pas encore publié de tweet.</p>
-            {% else %}
-                <ul>
-                    {% for tweet in tweets %}
-                        <li>
-                            
-                            <p><small>Publié le {{ tweet.createdAt|date('d/m/Y H:i') }}</small></p>
-                            <p>{{ tweet.content }}</p>
+		<div class="user-info">
+			<h3>Informations personnelles</h3>
+			<p>
+				<strong>Nom :</strong>
+				{{ user.username }}</p>
+			<p>
+				<strong>Email :</strong>
+				{{ user.email }}</p>
+			{# Ajouter d'autres informations personnelles si nécessaire #}
+		</div>
 
 
-                            <div class="d-flex justify-content-end align-items-center" >
-                            {# Boutons pour modifier ou supprimer un tweet #}
-                            <a href="{{ path('app_tweet_edit', {'id': tweet.id}) }}" class="btn btn-secondary">Modifier mon tweet</a>
+		<section class="d-flex flex-column justify-content-center align-items-center">
 
-                            <form method="get" action="{{ path('app_tweet_confirm_delete', {'id': tweet.id}) }}" style="display:inline;">
-                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ tweet.id) }}">
-                                <button type="submit" class="btn btn-secondary">Supprimer mon tweet</button>
-                            </div>
-                            
-                            </form>
-                        </li>
-                    {% endfor %}
-                </ul>
-            {% endif %}
-        </div>
+		    <div class="m-5 d-flex flex-column justify-content-center align-items-center">
+                <h3 class="mb-5">⇩ Clique ici pour partager ton prochain tweet ! ⇩</h3>
+				<a href="{{ path('app_tweet_new') }}" class="btn btn-secondary">Publier un tweet</a>
+			</div>
 
-        {# Ajouter un bouton pour créer un nouveau tweet #}
-        <div class="new-tweet">
-            <a href="{{ path('app_tweet_new') }}" class="btn btn-primary">Nouveau Tweet</a>
-        </div>
-    </div>
 
-    {# Ajoute des styles spécifiques si nécessaire #}
-    <style>
-        .profile-container {
-            margin: 20px;
-        }
 
-        .user-info, .tweets-section {
-            margin-bottom: 30px;
-        }
+			<div class="mt-5">
+				<h3>Mes dernières publications</h3>
+			</div>
 
-        .tweets-section ul {
-            list-style-type: none;
-            padding: 0;
-        }
+			<div>
+                <hr>
+				{% if tweets is empty %}
+					<p>Vous n'avez pas encore publié de tweet.</p>
 
-        .tweets-section li {
-            margin: 10px 0;
-            padding: 10px;
-            border: 1px solid #ccc;
-        }
+				{% else %}
+					<ul class="list-group list-group-flush">
+						{% for tweet in tweets %}
+							<li class="list-group-item text-white m-3">
+								<p>
+									<small>Publié le
+										{{ tweet.createdAt|date('d/m/Y H:i') }}</small>
+								</p>
+								<p>{{ tweet.content }}</p>
 
-        .new-tweet {
-            margin-top: 20px;
-        }
+								<div class="d-flex justify-content-end align-items-center">
+									<a href="{{ path('app_tweet_edit', {'id': tweet.id}) }}" class="fs-7 btn btn-secondary m-3">Modifier mon tweet</a>
 
-        .btn {
-            margin-right: 10px;
-        }
-    </style>
+									<form method="get" action="{{ path('app_tweet_confirm_delete', {'id': tweet.id}) }}" style="display:inline;">
+										<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ tweet.id) }}">
+										<button type="submit" class="btn btn-secondary">Supprimer mon tweet</button>
+									</form>
+								</div>
+
+							</li>
+						{% endfor %}
+					</ul>
+				{% endif %}
+			</div>
+		</section>
+
 
 {% endblock %}
-
