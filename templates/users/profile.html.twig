@@ -1,110 +1,141 @@
 {% extends 'base.html.twig' %}
 
-{% block body %}
-	<div class="profile-container text-white">
-		<h2>Profil de
-			{{ user.username }}</h2>
+{# {% block body %}
+	<div class="profile-container text-white mt-5">
+		<div class="row justify-content-center">
+			<h2>Profil de
+				{{ user.username }}</h2>
 
-		<div class="user-info">
-			<h3>Informations personnelles</h3>
-			<p>
-				<strong>Nom :</strong>
-				{{ user.username }}</p>
-			<p>
-				<strong>Email :</strong>
-				{{ user.email }}</p>
+			<div class="user-info">
+				<div class="col-12 col-md-8">
+					<h3>Informations personnelles</h3>
+					<p>
+						<strong>Nom :</strong>
+						{{ user.username }}</p>
+					<p>
+						<strong>Email :</strong>
+						{{ user.email }}</p>
 
-              <div class="profile-picture">
-                {% if user.profilePicture %}
-                    <img src="{{ asset('uploads/profile_pictures/' ~ user.profilePicture) }}" alt="Photo de profil" class="img-thumbnail" width="150">
-                {% else %}
-                    <img src="{{ asset('images/default-profile.png') }}" alt="Photo de profil" class="img-thumbnail" width="150">
-                {% endif %}
-            </div>    
+					<div class="profile-picture">
+						{% if user.profilePicture %}
+							<img src="{{ asset('uploads/profile_pictures/' ~ user.profilePicture) }}" alt="Photo de profil" class="img-thumbnail" width="150">
+						{% else %}
+							<img src="{{ asset('images/default-profile.png') }}" alt="Photo de profil" class="img-thumbnail" width="150">
+						{% endif %}
+					</div>
 
-			<div class="edit_profile">
-				<a href="{{ path('app_profile_edit') }}">Modifier mon profile</a>
-			</div>
+					<div class="edit_profile">
+						<a href="{{ path('app_profile_edit') }}">Modifier mon profile</a>
+					</div>
 
-			<form action="{{ path('app_profile_delete') }}" method="post" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer votre profil ?');">
-				<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
-				<button type="submit" class="btn btn-danger">Supprimer mon profil</button>
-			</form>
-			{% for label, messages in app.flashes %}
-				<div class="alert alert-{{ label }}">
-					{% for message in messages %}
-						<p>{{ message }}</p>
+					<form action="{{ path('app_profile_delete') }}" method="post" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer votre profil ?');">
+						<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
+						<button type="submit" class="btn btn-danger">Supprimer mon profil</button>
+					</form>
+					{% for label, messages in app.flashes %}
+						<div class="alert alert-{{ label }}">
+							{% for message in messages %}
+								<p>{{ message }}</p>
+							{% endfor %}
+						</div>
 					{% endfor %}
 				</div>
-			{% endfor %}
-		</div>
+			</div>
+		</div> #}
 
-		
-        <div class="tweets-section d-flex flex-column justify-content-center align-items-center">
-            <h3>Mes Tweets</h3>
+        {% block body %}
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <!-- Profil Container -->
+            <div class="col-12 col-md-8">
+                <!-- Profile Header -->
+                <div class="text-center mb-4">
+                    <h2 class="display-4 text-white">{{ user.username }}</h2>
+                    <p class="text-white">Mon profil</p>
+                </div>
 
-         
+                <!-- Photo de Profil et Informations -->
+                <div class="text-center mb-4">
+                    <div class="profile-picture">
+                        {% if user.profilePicture %}
+                            <img src="{{ asset('uploads/profile_pictures/' ~ user.profilePicture) }}" alt="Photo de profil" class="img-fluid rounded-circle border-none" width="250" height="250">
+                        {% else %}
+                            <img src="{{ asset('images/default-profile.png') }}" alt="Photo de profil" class="img-fluid rounded-circle border" width="150">
+                        {% endif %}
+                    </div>
+                    <div class="mt-3">
+                        <h4 class="text-white">{{ user.username }}</h4>
+                        <p class="text-white">{{ user.email }}</p>
+                    </div>
+                </div>
 
-			{% if tweets is empty %}
-				<p>Vous n'avez pas encore publié de tweet.</p>
-			{% else %}
-				<ul>
-					{% for tweet in tweets %}
-						<li>
-							<p>{{ tweet.content }}</p>
-							<p>
-								<small>Publié le
-									{{ tweet.createdAt|date('d/m/Y H:i') }}</small>
-							</p>
+                <!-- Modifier le profil -->
+                <div class="text-center">
+                    <a href="{{ path('app_profile_edit') }}" class="btn btn-primary mb-3">Modifier mon profil</a>
+                </div>
 
-							{# Boutons pour modifier ou supprimer un tweet #}
-							<a href="{{ path('app_tweet_edit', {'id': tweet.id}) }}" class="btn btn-warning">Modifier</a>
+                <!-- Flash Messages -->
+                {% for label, messages in app.flashes %}
+                    <div class="alert alert-{{ label }} mt-4">
+                        {% for message in messages %}
+                            <p>{{ message }}</p>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
 
-							<form method="get" action="{{ path('app_tweet_confirm_delete', {'id': tweet.id}) }}" style="display:inline;">
-								<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ tweet.id) }}">
-								<button type="submit" class="btn btn-danger">Supprimer</button>
-							</form>
-						</li>
-					{% endfor %}
-				</ul>
-			{% endif %}
-		</div>
+                <!-- Suppression du Profil -->
+                <form action="{{ path('app_profile_delete') }}" method="post" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer votre profil ?');" class="mt-4">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
+                    <button type="submit" class="btn btn-danger d-block mx-auto mt-4">Supprimer mon profil</button>
+                </form>
+            </div>
+        </div>
+    </div>
 
-		{# Ajouter un bouton pour créer un nouveau tweet #}
-		<div class="new-tweet">
-			<a href="{{ path('app_tweet_new') }}" class="btn btn-primary">Nouveau Tweet</a>
-		</div>
-	</div>
 
-	{# Ajoute des styles spécifiques si nécessaire #}
-	<style>
-		.profile-container {
-			margin: 20px;
-		}
 
-		.user-info,
-		.tweets-section {
-			margin-bottom: 30px;
-		}
+		<section class="d-flex flex-column justify-content-center align-items-center">
 
-		.tweets-section ul {
-			list-style-type: none;
-			padding: 0;
-		}
+			<div class="m-5 d-flex flex-column justify-content-center align-items-center">
+				<h3 class="mb-5">⇩ Clique ici pour partager ton prochain tweet ! ⇩</h3>
+				<a href="{{ path('app_tweet_new') }}" class="btn btn-secondary">Publier un tweet</a>
+			</div>
 
-		.tweets-section li {
-			margin: 10px 0;
-			padding: 10px;
-			border: 1px solid #ccc;
-		}
 
-		.new-tweet {
-			margin-top: 20px;
-		}
+			<div class="mt-5">
+				<h3>Mes dernières publications</h3>
+			</div>
 
-		.btn {
-			margin-right: 10px;
-		}
-	</style>
+			<div>
+				<hr>
+				{% if tweets is empty %}
+					<p>Vous n'avez pas encore publié de tweet.</p>
 
-{% endblock %}
+				{% else %}
+					<ul class="list-group list-group-flush">
+						{% for tweet in tweets %}
+							<li class="list-group-item text-white m-3">
+								<p>
+									<small>Publié le
+										{{ tweet.createdAt|date('d/m/Y H:i') }}</small>
+								</p>
+								<p>{{ tweet.content }}</p>
+
+								<div class="d-flex justify-content-end align-items-center">
+									<a href="{{ path('app_tweet_edit', {'id': tweet.id}) }}" class="fs-7 btn btn-secondary m-3">Modifier mon tweet</a>
+
+									<form method="get" action="{{ path('app_tweet_confirm_delete', {'id': tweet.id}) }}" style="display:inline;">
+										<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ tweet.id) }}">
+										<button type="submit" class="btn btn-secondary">Supprimer mon tweet</button>
+									</form>
+								</div>
+
+							</li>
+						{% endfor %}
+					</ul>
+				{% endif %}
+			</div>
+		</section>
+
+
+	{% endblock %}
