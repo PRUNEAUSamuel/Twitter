@@ -1,80 +1,107 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-<div class="profile-container">
-        <h2>Profil de {{ user.username }}</h2>
+	<div class="profile-container text-white">
+		<h2>Profil de
+			{{ user.username }}</h2>
 
-        <div class="user-info">
-            <h3>Informations personnelles</h3>
-            <p><strong>Nom :</strong> {{ user.username }}</p>
-            <p><strong>Email :</strong> {{ user.email }}</p>
+		<div class="user-info">
+			<h3>Informations personnelles</h3>
+			<p>
+				<strong>Nom :</strong>
+				{{ user.username }}</p>
+			<p>
+				<strong>Email :</strong>
+				{{ user.email }}</p>
 
-            <div class="edit_profile">
-                <a href="{{ path('app_profile_edit') }}">Modifier mon profile</a>
-            </div>
+              <div class="profile-picture">
+                {% if user.profilePicture %}
+                    <img src="{{ asset('uploads/profile_pictures/' ~ user.profilePicture) }}" alt="Photo de profil" class="img-thumbnail" width="150">
+                {% else %}
+                    <img src="{{ asset('images/default-profile.png') }}" alt="Photo de profil" class="img-thumbnail" width="150">
+                {% endif %}
+            </div>    
 
-        </div>
+			<div class="edit_profile">
+				<a href="{{ path('app_profile_edit') }}">Modifier mon profile</a>
+			</div>
 
-        <div class="tweets-section">
-            <h3>Mes Tweets</h3>
+			<form action="{{ path('app_profile_delete') }}" method="post" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer votre profil ?');">
+				<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
+				<button type="submit" class="btn btn-danger">Supprimer mon profil</button>
+			</form>
+			{% for label, messages in app.flashes %}
+				<div class="alert alert-{{ label }}">
+					{% for message in messages %}
+						<p>{{ message }}</p>
+					{% endfor %}
+				</div>
+			{% endfor %}
+		</div>
 
-            {% if tweets is empty %}
-                <p>Vous n'avez pas encore publié de tweet.</p>
-            {% else %}
-                <ul>
-                    {% for tweet in tweets %}
-                        <li>
-                            <p>{{ tweet.content }}</p>
-                            <p><small>Publié le {{ tweet.createdAt|date('d/m/Y H:i') }}</small></p>
+		<div class="tweets-section">
+			<h3>Mes Tweets</h3>
 
-                            {# Boutons pour modifier ou supprimer un tweet #}
-                            <a href="{{ path('app_tweet_edit', {'id': tweet.id}) }}" class="btn btn-warning">Modifier</a>
+			{% if tweets is empty %}
+				<p>Vous n'avez pas encore publié de tweet.</p>
+			{% else %}
+				<ul>
+					{% for tweet in tweets %}
+						<li>
+							<p>{{ tweet.content }}</p>
+							<p>
+								<small>Publié le
+									{{ tweet.createdAt|date('d/m/Y H:i') }}</small>
+							</p>
 
-                            <form method="get" action="{{ path('app_tweet_confirm_delete', {'id': tweet.id}) }}" style="display:inline;">
-                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ tweet.id) }}">
-                                <button type="submit" class="btn btn-danger">Supprimer</button>
-                            </form>
-                        </li>
-                    {% endfor %}
-                </ul>
-            {% endif %}
-        </div>
+							{# Boutons pour modifier ou supprimer un tweet #}
+							<a href="{{ path('app_tweet_edit', {'id': tweet.id}) }}" class="btn btn-warning">Modifier</a>
 
-        {# Ajouter un bouton pour créer un nouveau tweet #}
-        <div class="new-tweet">
-            <a href="{{ path('app_tweet_new') }}" class="btn btn-primary">Nouveau Tweet</a>
-        </div>
-    </div>
+							<form method="get" action="{{ path('app_tweet_confirm_delete', {'id': tweet.id}) }}" style="display:inline;">
+								<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ tweet.id) }}">
+								<button type="submit" class="btn btn-danger">Supprimer</button>
+							</form>
+						</li>
+					{% endfor %}
+				</ul>
+			{% endif %}
+		</div>
 
-    {# Ajoute des styles spécifiques si nécessaire #}
-    <style>
-        .profile-container {
-            margin: 20px;
-        }
+		{# Ajouter un bouton pour créer un nouveau tweet #}
+		<div class="new-tweet">
+			<a href="{{ path('app_tweet_new') }}" class="btn btn-primary">Nouveau Tweet</a>
+		</div>
+	</div>
 
-        .user-info, .tweets-section {
-            margin-bottom: 30px;
-        }
+	{# Ajoute des styles spécifiques si nécessaire #}
+	<style>
+		.profile-container {
+			margin: 20px;
+		}
 
-        .tweets-section ul {
-            list-style-type: none;
-            padding: 0;
-        }
+		.user-info,
+		.tweets-section {
+			margin-bottom: 30px;
+		}
 
-        .tweets-section li {
-            margin: 10px 0;
-            padding: 10px;
-            border: 1px solid #ccc;
-        }
+		.tweets-section ul {
+			list-style-type: none;
+			padding: 0;
+		}
 
-        .new-tweet {
-            margin-top: 20px;
-        }
+		.tweets-section li {
+			margin: 10px 0;
+			padding: 10px;
+			border: 1px solid #ccc;
+		}
 
-        .btn {
-            margin-right: 10px;
-        }
-    </style>
+		.new-tweet {
+			margin-top: 20px;
+		}
+
+		.btn {
+			margin-right: 10px;
+		}
+	</style>
 
 {% endblock %}
-

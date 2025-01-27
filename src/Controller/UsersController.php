@@ -13,6 +13,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 
 #[Route('/users')]
@@ -54,12 +56,20 @@ final class UsersController extends AbstractController
     #[Route('/profile/edit', name: 'app_profile_edit', methods: ['GET', 'POST'])]
     public function editProfile(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
     {
-        // Récupérer l'utilisateur connecté
-        $user = $this->getUser();
 
-        // if (!$user) {
-        //     return $this->redirectToRoute('app_login');
-        // }
+         /** @var \App\Entity\Users $user */
+         $user = $this->getUser();
+        
+
+    if (!$user instanceof Users) {
+        throw new \LogicException('The logged-in user is not valid.');
+    }
+
+
+        if (!$user) {
+            return $this->redirectToRoute('app_login');
+        }
+
         
         // Créer le formulaire d'édition
         $form = $this->createForm(UsersType::class, $user);
@@ -70,6 +80,15 @@ final class UsersController extends AbstractController
             $email = $form->get('email')->getData();
             $password = $form->get('password')->getData();
             $confirmPassword = $form->get('Confirm_password')->getData();
+
+            if ($password) {
+                // Vérifier si le champ Confirm_password est rempli
+                if (empty($confirmPassword)) {
+                    // Si le champ Confirm_password est vide, afficher une erreur
+                    $this->addFlash('error', 'Veuillez confirmer votre mot de passe.');
+                    return $this->redirectToRoute('app_profile_edit');
+                }
+            }    
       
             if($password && $confirmPassword){
                 if($password !== $confirmPassword){
@@ -78,18 +97,40 @@ final class UsersController extends AbstractController
                 }
               
                 $hashedPassword = $passwordHasher->hashPassword($user, $password);
-                $user->$this->setPassword($hashedPassword);
+                $user->setPassword($hashedPassword);
             }
             if($username){
-                $user->$this->setUsername($username);
+                $user->setUsername($username);
             }
             if($email){
-                $user->$this->setEmail($email);
+                $user->setEmail($email);
             }
+
+             /** @var UploadedFile $photoFile */
+             $photoFile = $form->get('profilePicture')->getData();
+
+             if ($photoFile) {
+                 // Générer un nom de fichier unique basé sur uniqid()
+                 $newFilename = uniqid() . '.' . $photoFile->guessExtension();
+ 
+                 // Déplacer le fichier vers le dossier public/uploads/profile_pictures
+                 try {
+                     $photoFile->move(
+                         $this->getParameter('profile_pictures_directory'), // Dossier où l'image sera sauvegardée
+                         $newFilename
+                     );
+                     $user->setProfilePicture($newFilename); // Enregistrer le nom du fichier dans la base de données
+                 } catch (\Exception $e) {
+                     $this->addFlash('error', 'Impossible de télécharger la photo de profil.');
+                     return $this->redirectToRoute('app_profile_edit');
+                 }
+             }
+            
+
             $entityManager->persist($user);
             $entityManager->flush();
             $this->addFlash('success', 'Votre profil a été mis à jours.');
-            return $this->redirectToRoute('app_profile_edit');
+            return $this->redirectToRoute('app_profile');
         //    $newPassword = $form->get('password')->getData();
         //    if (!$user instanceof Users) {
         //     throw new \Exception('L\'utilisateur récupéré n\'est pas valide');
@@ -105,17 +146,47 @@ final class UsersController extends AbstractController
         //     return $this->redirectToRoute('app_profile');
         
         }
-            return $this->render('edit_profile.html.twig', [
+            return $this->render('users/edit_profile.html.twig', [
             'form' => $form->createView(),
+            'user' => $user,
             ]);
          
     }
 
-//     #[Route('/profile/delete', name: 'app_profile_delete', methods: ['POST'])]
-//     public function delete(Request $request, Users $user, EntityManagerInterface $entityManager): Response
+    #[Route('/profile/delete', name: 'app_profile_delete', methods: ['POST'])]
+    public function delete(Request $request, EntityManagerInterface $entityManager, TokenStorageInterface $tokenStorage, SessionInterface $session): Response
+  
+    {
+           /** @var \App\Entity\Users $user */
+        $user = $this->getUser();
+     
 
-//   {
+        if (!$user) {
+            return $this->redirectToRoute('app_login');
+        }
 
-//   }
+        $csrfToken = $request->request->get('_token');
+       
+        // Vérifier que le token CSRF est valide
+        if (!$this->isCsrfTokenValid('delete' . $user->getId(), $csrfToken)) {
+            $this->addFlash('error', 'Token de suppression invalide.');
+            return $this->redirectToRoute('app_profile');
+        }
+
+        if ($request->isMethod('POST') && $user) {
+            // Supprimer l'utilisateur de la base de données
+            $entityManager->remove($user);
+            $entityManager->flush();
+
+            $tokenStorage->setToken(null);  // Déconnecte l'utilisateur
+            $session->invalidate();
+
+            $this->addFlash('success', 'Votre profil a été supprimé avec succès.');
+
+            return $this->redirectToRoute('app_login'); 
+        }
+        $this->addFlash('error', 'Erreur lors de la suppression du profil.');
+        return $this->redirectToRoute('app_profile'); 
+    }
 
 }

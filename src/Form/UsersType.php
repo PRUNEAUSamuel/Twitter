@@ -9,11 +9,13 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\EqualTo;
+use Symfony\Component\Validator\Constraints\Image;
 
 class UsersType extends AbstractType
 {
@@ -34,7 +36,7 @@ class UsersType extends AbstractType
                 'label' => 'Nouveau mot de passe',
                 'required' => false,
                 'mapped' => false,
-               
+                'constraints' => [ 
                     new Length([
                         'min' => 6,
                         'minMessage' => 'Your password should be at least {{ limit }} characters',
@@ -42,7 +44,7 @@ class UsersType extends AbstractType
                         'max' => 4096,
                     ]),
                 ],
-            )
+            ])
             ->add('Confirm_password', PasswordType::class, [
                 'label' => 'Confirmer le mot de passe',
                 'mapped' => false,
@@ -53,11 +55,19 @@ class UsersType extends AbstractType
             //     $password = $form->get('password')->getData();
             //     return $password ? ['Default'] : [];
             // },
-           
             ])
-            ->add('save', SubmitType::class,[
-                'label' => 'Modifier le profil',
+            ->add('profilePicture', FileType::class, [
+                'label' => 'Photo de profil',
+                'mapped' => false,
+                'required' => false,
+                'constraints' => [
+                    new Image([
+                        'mimeTypes' => ['image/jpeg', 'image/png'],
+                        'mimeTypesMessage' => 'Merci de télécharger une image valide (JPEG ou PNG)',
+                    ])
+                ]
             ]);
+            
     }
 
     public function configureOptions(OptionsResolver $resolver): void
