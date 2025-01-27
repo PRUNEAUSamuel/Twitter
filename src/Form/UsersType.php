@@ -8,6 +8,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Length;
@@ -20,6 +21,7 @@ class UsersType extends AbstractType
     {
         $builder
             ->add('username', TextType::class,[
+                'required' => false,
                 'label' => 'Nom d\'utilisateur',
                 ])
             ->add('email', EmailType::class, [
@@ -31,11 +33,8 @@ class UsersType extends AbstractType
                 // this is read and encoded in the controller
                 'label' => 'Nouveau mot de passe',
                 'required' => false,
-                'attr' => ['autocomplete' => 'new-password'],
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Please enter a password',
-                    ]),
+                'mapped' => false,
+               
                     new Length([
                         'min' => 6,
                         'minMessage' => 'Your password should be at least {{ limit }} characters',
@@ -43,23 +42,22 @@ class UsersType extends AbstractType
                         'max' => 4096,
                     ]),
                 ],
+            )
+            ->add('Confirm_password', PasswordType::class, [
+                'label' => 'Confirmer le mot de passe',
+                'mapped' => false,
+                'required'=> false,
+                'attr' => ['autocomplete' => 'new-password'],
+                
+            //     'validation_groups' => function($form) {
+            //     $password = $form->get('password')->getData();
+            //     return $password ? ['Default'] : [];
+            // },
+           
+            ])
+            ->add('save', SubmitType::class,[
+                'label' => 'Modifier le profil',
             ]);
-            // ->add('Confirm_password', PasswordType::class, [
-            //     'label' => 'Confirmer le mot de passe',
-            //     'mapped' => false,
-            //     'required'=> false,
-            //     'attr' => ['autocomplete' => 'new-password'],
-            //     'constraints' => [
-            //         new EqualTo([
-            //             'propertyPath' => 'password', 
-            //             'message' => 'Le mots de passe ne correspond pas'
-            //         ])
-            //         ],
-            // //     'validation_groups' => function($form) {
-            // //     $password = $form->get('password')->getData();
-            // //     return $password ? ['Default'] : [];
-            // // },
-            // ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

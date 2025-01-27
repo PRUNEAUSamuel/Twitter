@@ -7,7 +7,6 @@ use App\Repository\TweetsRepository;
 use App\Form\UsersType;
 use App\Repository\UsersRepository;
 use App\Entity\Tweets;
-use App\Form\TweetsType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -58,34 +57,55 @@ final class UsersController extends AbstractController
         // Récupérer l'utilisateur connecté
         $user = $this->getUser();
 
-        
-        if (!$user) {
-            return $this->redirectToRoute('app_login');
-        }
-       
-
+        // if (!$user) {
+        //     return $this->redirectToRoute('app_login');
+        // }
         
         // Créer le formulaire d'édition
         $form = $this->createForm(UsersType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-           $newPassword = $form->get('password')->getData();
-           if (!$user instanceof Users) {
-            throw new \Exception('L\'utilisateur récupéré n\'est pas valide');
+            $username = $form->get('username')->getData();
+            $email = $form->get('email')->getData();
+            $password = $form->get('password')->getData();
+            $confirmPassword = $form->get('Confirm_password')->getData();
+      
+            if($password && $confirmPassword){
+                if($password !== $confirmPassword){
+                    $this->addFlash('error', 'les mots de passe ne corresponde pas.');
+                    return $this->redirectToRoute('app_profile_edit');
+                }
+              
+                $hashedPassword = $passwordHasher->hashPassword($user, $password);
+                $user->$this->setPassword($hashedPassword);
             }
-         
-            if($newPassword){
-            
-                $user->setPassword($passwordHasher->hashPassword($user, $newPassword));
+            if($username){
+                $user->$this->setUsername($username);
             }
+            if($email){
+                $user->$this->setEmail($email);
+            }
+            $entityManager->persist($user);
             $entityManager->flush();
+            $this->addFlash('success', 'Votre profil a été mis à jours.');
+            return $this->redirectToRoute('app_profile_edit');
+        //    $newPassword = $form->get('password')->getData();
+        //    if (!$user instanceof Users) {
+        //     throw new \Exception('L\'utilisateur récupéré n\'est pas valide');
+        //     }
+         
+        //     if($newPassword){
+            
+        //         $user->setPassword($passwordHasher->hashPassword($user, $newPassword));
+        //     }
+        //     $entityManager->flush();
 
-            $this->addFlash('success', 'Votre profil a été mis a jour avec succès.');
-            return $this->redirectToRoute('app_profile');
+        //     $this->addFlash('success', 'Votre profil a été mis a jour avec succès.');
+        //     return $this->redirectToRoute('app_profile');
         
         }
-            return $this->render('users/edit_profile.html.twig', [
+            return $this->render('edit_profile.html.twig', [
             'form' => $form->createView(),
             ]);
          
