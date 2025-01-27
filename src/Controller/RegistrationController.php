@@ -9,6 +9,7 @@ use App\Entity\Tweets;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mime\Address;
@@ -31,6 +32,15 @@ class RegistrationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $existingUser = $entityManager->getRepository(Users::class)->findOneBy(["email" => $user->getEmail()]);
+
+            if($existingUser) {
+                $form->addError(new FormError("Cet email est déjà utilisé."));
+                return $this->render('registration/register.html.twig', [
+                    'registrationForm' => $form,
+                ]);
+            }
             /** @var string $plainPassword */
             $plainPassword = $form->get('plainPassword')->getData();
 
