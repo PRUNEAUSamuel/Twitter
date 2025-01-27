@@ -28,6 +28,13 @@ final class TweetsController extends AbstractController{
 #[Route('/profile/tweet/new', name: 'app_tweet_new', methods: ['GET', 'POST'])]
 public function newTweet(Request $request, EntityManagerInterface $entityManager): Response
 {
+    $user = $this->getUser();
+
+        // Si l'utilisateur n'est pas connecté, rediriger vers la page de login
+    if (!$user) {
+        return $this->redirectToRoute('app_login');
+    }
+
     $tweet = new Tweets();
     $tweet->setUser($this->getUser()); // Lier le tweet à l'utilisateur connecté
 
