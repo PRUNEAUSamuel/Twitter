@@ -1,0 +1,4 @@
+.swal2-icon.swal2-warning {
+    color: red;  /* Change la couleur de l'icône warning en rouge */
+    border-color: red
+}
