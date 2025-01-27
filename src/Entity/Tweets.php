@@ -98,6 +98,7 @@ class Tweets
     public function setContent(?string $content): static
     {
         $this->content = $content;
+        
 
         return $this;
     }
