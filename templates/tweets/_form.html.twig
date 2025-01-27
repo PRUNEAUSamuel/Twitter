@@ -4,6 +4,10 @@
 
 {{ form_start(form) }}
 
+{% for error in form.content.vars.errors %}
+        <div class="text-danger">{{ error.message }}</div>
+    {% endfor %}
+
 <div class="form-floating my-3">
     {{ form_widget(form.content,) }}
     {{ form_label(form.content, "Quoi de neuf ?!",) }}

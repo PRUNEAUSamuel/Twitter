@@ -7,6 +7,7 @@ use App\Form\TweetsType;
 use App\Repository\TweetsRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -42,10 +43,13 @@ public function newTweet(Request $request, EntityManagerInterface $entityManager
     $form = $this->createForm(TweetsType::class, $tweet);
     $form->handleRequest($request);
 
+    if(strlen($tweet->getContent())>255) {
+        $form->get('content')->addError(new FormError("Le contenu du tweet ne peut pas dépasser 255 caractères."));
+    }
+
     if ($form->isSubmitted() && $form->isValid()) {
         $entityManager->persist($tweet);
         $entityManager->flush();
-
         return $this->redirectToRoute('app_tweets_index');
     }
 
