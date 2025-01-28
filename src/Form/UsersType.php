@@ -34,6 +34,7 @@ class UsersType extends AbstractType
                 'label' => 'Ancien mot de passe',
                 'mapped' => false,
                 'attr' => ['autocomplete' => 'current-password'],
+                'required' => false,
             ])
             ->add('password', PasswordType::class, [
                 // instead of being set onto the object directly,

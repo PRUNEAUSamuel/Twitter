@@ -2,6 +2,12 @@
 
 {% block title %}Twitter > X{% endblock %}
 
+
+{% block javascripts %}
+	<script src="{{ asset('js/like.js') }}" defer></script>
+{% endblock %}
+
+
 {% block body %}
 
 	<main class="w-50  mx-auto">
@@ -36,18 +42,16 @@
 						</span>
 						<p class="p-2 text-break">{{ tweet.content }}</p>
 						<div>
-							{{ tweet.likes|length }}
-							<button class="btn btn-outline-danger fw-bold my-2 like-btn" 
-								id="like-button-{{ tweet.id }}"
-								{% if app.user and tweet.likes|filter(user => user.id == app.user.id)|length > 0 %}
-									disabled
-								{% endif %}>
+							<span id="likes-count-{{ tweet.id }}">{{ tweet.likes | length }}</span>
+							<button class="btn btn-outline-danger fw-bold my-2 like-btn" id="like-button-{{ tweet.id }}" data-tweet-id="{{ tweet.id }}">
 								<i class="fas fa-thumbs-up"></i>
-								{% if app.user and tweet.likes|filter(user => user.id == app.user.id)%}
-									Dislike
-								{% else %}
-									Like
-								{% endif %}
+								<div class="like-{{tweet.id}}">
+									{% if app.user and tweet.likes|filter(like => like.user.id == app.user.id)|length > 0 %}
+										Dislike
+									{% else %}
+										Like
+									{% endif %}
+								</div>
 							</button>
 						</div>
 					</div>
@@ -55,5 +59,5 @@
 			{% endif %}
 		</section>
 	</main>
-
+	
 {% endblock %}

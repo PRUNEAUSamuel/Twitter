@@ -116,7 +116,7 @@ public function deleteTweet(Request $request, Tweets $tweet, EntityManagerInterf
 }
 
 #[Route("/like/{tweetId}", name:"like_tweet", methods:["POST"])]
-public function like(int $tweetId, TweetsRepository $tweetRepository, EntityManagerInterface $entityManager): JsonResponse
+public function like(int $tweetId, TweetsRepository $tweetRepository, Request $request, EntityManagerInterface $entityManager): JsonResponse
 {
     $user = $this->getUser();  // L'utilisateur connecté
     $tweet = $tweetRepository->find($tweetId);
@@ -129,19 +129,34 @@ public function like(int $tweetId, TweetsRepository $tweetRepository, EntityMana
         return $like->getUser() === $user;
     })->first();
 
-    if (!$existingLike) {
-        // Ajouter un like
-        $like = new Likes();
-        $like->setUser($user);
-        $like->setTweet($tweet);
-
-        $entityManager->persist($like);
+    if ($existingLike) {
+        // Retirer le like (dislike)
+        $entityManager->remove($existingLike);
         $entityManager->flush();
+        $entityManager->refresh($tweet);
+
+        $likeCount = $tweet->getLikes()->count();
+
+        return new JsonResponse([
+            'status' => 'success',
+            'likesCount' => $likeCount,
+            'liked' => false, 
+        ]);
     }
+
+    $like = new Likes();
+    $like->setUser($user);
+    $like->setTweet($tweet);
+
+    $entityManager->persist($like);
+    $entityManager->flush();
+    $entityManager->refresh($tweet);
+
 
     return new JsonResponse([
         'status' => 'success',
         'likesCount' => $tweet->getLikes()->count(),
+        'liked' => true,
     ]);
 }
 
