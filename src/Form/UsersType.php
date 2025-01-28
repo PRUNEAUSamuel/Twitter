@@ -8,14 +8,10 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Component\Validator\Constraints\EqualTo;
-use Symfony\Component\Validator\Constraints\Image;
 
 class UsersType extends AbstractType
 {
@@ -23,25 +19,20 @@ class UsersType extends AbstractType
     {
         $builder
             ->add('username', TextType::class,[
-                'required' => false,
-                'label' => 'Nom d\'utilisateur',
+                'Label' => 'Nom d\'utilisateur',
                 ])
             ->add('email', EmailType::class, [
-                'label' => 'Email',
-                'required' => false,
+                'Label' => 'Email',
             ])
-            ->add('oldPassword', PasswordType::class,[
-                'label' => 'Ancien mot de passe',
-                'mapped' => false,
-                'attr' => ['autocomplete' => 'current-password'],
-            ])
-            ->add('password', PasswordType::class, [
+            ->add('Password', PasswordType::class, [
                 // instead of being set onto the object directly,
                 // this is read and encoded in the controller
-                'label' => 'Nouveau mot de passe',
-                'required' => false,
-                'mapped' => false,
-                'constraints' => [ 
+                'Label' => 'Nouveau mot de passe',
+                'attr' => ['autocomplete' => 'new-password'],
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Please enter a password',
+                    ]),
                     new Length([
                         'min' => 6,
                         'minMessage' => 'Your password should be at least {{ limit }} characters',
@@ -50,29 +41,7 @@ class UsersType extends AbstractType
                     ]),
                 ],
             ])
-            ->add('Confirm_password', PasswordType::class, [
-                'label' => 'Confirmer le mot de passe',
-                'mapped' => false,
-                'required'=> false,
-                'attr' => ['autocomplete' => 'new-password'],
-                
-            //     'validation_groups' => function($form) {
-            //     $password = $form->get('password')->getData();
-            //     return $password ? ['Default'] : [];
-            // },
-            ])
-            ->add('profilePicture', FileType::class, [
-                'label' => 'Photo de profil',
-                'mapped' => false,
-                'required' => false,
-                'constraints' => [
-                    new Image([
-                        'mimeTypes' => ['image/jpeg', 'image/png'],
-                        'mimeTypesMessage' => 'Merci de télécharger une image valide (JPEG ou PNG)',
-                    ])
-                ]
-            ]);
-            
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void
