@@ -3,28 +3,22 @@
 {% block title %}Retweeter{% endblock %}
 
 {% block body %}
-<main class="w-50 mx-auto">
-
-    <section class="border border-1 border-secondary p-4">
-        <h2 class="text-center">Retweeter</h2>
+<main>
+    <section>
+        <h2>Retweeter</h2>
 
         <form action="{{ path('app_tweet_retweet', { id: tweet.id }) }}" method="POST">
-            <div class="mb-3">
-                <textarea 
-                    class="form-control" 
-                    name="content" 
-                    rows="3" 
-                    placeholder="Ajoutez votre commentaire ici..."></textarea>
+            <div>
+                <label for="retweet-content-{{ tweet.id }}"> Retweeter ici :</label>
+                <input 
+                    type="text"
+                    id="retweet-content-{{ tweet.id }}" 
+                    name="retweet_content" 
+                    maxlength="255"
+                />
             </div>
-            <button type="submit" class="btn btn-primary">Retweeter</button>
+            <button type="submit">Retweeter</button>
         </form>
     </section>
-
-    <section class="border border-1 border-secondary p-4 mt-4">
-        <h4>Tweet original :</h4>
-        <p><strong>{{ tweet.user.username }}</strong> - {{ tweet.createdAt|date('d/m/Y H:i') }}</p>
-        <p class="text-break">{{ tweet.content }}</p>
-    </section>
-
 </main>
 {% endblock %}
