@@ -30,6 +30,11 @@ class UsersType extends AbstractType
                 'label' => 'Email',
                 'required' => false,
             ])
+            ->add('oldPassword', PasswordType::class,[
+                'label' => 'Ancien mot de passe',
+                'mapped' => false,
+                'attr' => ['autocomplete' => 'current-password'],
+            ])
             ->add('password', PasswordType::class, [
                 // instead of being set onto the object directly,
                 // this is read and encoded in the controller
