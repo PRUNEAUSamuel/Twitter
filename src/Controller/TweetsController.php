@@ -70,6 +70,10 @@ public function editTweet(Request $request, Tweets $tweet, EntityManagerInterfac
     $form = $this->createForm(TweetsType::class, $tweet);
     $form->handleRequest($request);
 
+    if(strlen($tweet->getContent())>255) {
+        $form->get('content')->addError(new FormError("Le contenu du tweet ne peut pas dépasser 255 caractères."));
+    }
+
     if ($form->isSubmitted() && $form->isValid()) {
         $entityManager->flush();
         return $this->redirectToRoute('app_tweets_index');
