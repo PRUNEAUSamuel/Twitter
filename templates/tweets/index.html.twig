@@ -35,6 +35,21 @@
 							{# {{ tweet.updateAt ? tweet.updateAt|date('d/m/Y H:i:s') : '' }} #}
 						</span>
 						<p class="p-2 text-break">{{ tweet.content }}</p>
+						<div>
+							{{ tweet.likes|length }}
+							<button class="btn btn-outline-danger fw-bold my-2 like-btn" 
+								id="like-button-{{ tweet.id }}"
+								{% if app.user and tweet.likes|filter(user => user.id == app.user.id)|length > 0 %}
+									disabled
+								{% endif %}>
+								<i class="fas fa-thumbs-up"></i>
+								{% if app.user and tweet.likes|filter(user => user.id == app.user.id)%}
+									Dislike
+								{% else %}
+									Like
+								{% endif %}
+							</button>
+						</div>
 					</div>
 				{% endfor %}
 			{% endif %}

@@ -2,3 +2,16 @@
     color: red;  /* Change la couleur de l'icône warning en rouge */
     border-color: red
 }
+
+.like-btn {
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.like-btn:hover {
+    transform: scale(1.1);
+    background-color: #ff4d4d;  /* Couleur rouge */
+}
+
+.like-btn:active {
+    transform: scale(0.95);
+}

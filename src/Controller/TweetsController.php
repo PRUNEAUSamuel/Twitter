@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Tweets;
+use App\Entity\Likes;
 use App\Form\TweetsType;
 use App\Repository\TweetsRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -11,7 +12,7 @@ use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 
 #[Route('/tweets')]
@@ -114,5 +115,34 @@ public function deleteTweet(Request $request, Tweets $tweet, EntityManagerInterf
     return $this->redirectToRoute('app_profile');
 }
 
+#[Route("/like/{tweetId}", name:"like_tweet", methods:["POST"])]
+public function like(int $tweetId, TweetsRepository $tweetRepository, EntityManagerInterface $entityManager): JsonResponse
+{
+    $user = $this->getUser();  // L'utilisateur connecté
+    $tweet = $tweetRepository->find($tweetId);
+
+    if (!$tweet) {
+        return new JsonResponse(['status' => 'error', 'message' => 'Le tweet n\'existe pas.'], 400);
+    }
+
+    $existingLike = $tweet->getLikes()->filter(function($like) use ($user) {
+        return $like->getUser() === $user;
+    })->first();
+
+    if (!$existingLike) {
+        // Ajouter un like
+        $like = new Likes();
+        $like->setUser($user);
+        $like->setTweet($tweet);
+
+        $entityManager->persist($like);
+        $entityManager->flush();
+    }
+
+    return new JsonResponse([
+        'status' => 'success',
+        'likesCount' => $tweet->getLikes()->count(),
+    ]);
 }
 
+}
