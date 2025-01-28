@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const tweetId = button.getAttribute('data-tweet-id');
             const likesCountElement = document.getElementById('likes-count-' + tweetId);
             const buttonContent = document.querySelector(`.like-${tweetId}`);
+            const image = document.querySelectorAll('.like-img-' + tweetId);
 
             // Déterminer si l'utilisateur a déjà liké ou non
             const liked = button.getAttribute('data-liked') === 'true';
@@ -31,9 +32,17 @@ document.addEventListener("DOMContentLoaded", function () {
                     if (data.liked) {
                         buttonContent.textContent = 'Dislike';
                         buttonContent.setAttribute('data-liked', 'true');
+                        image.forEach(image => {
+                            image.classList.remove('far');
+                            image.classList.add('fas');
+                        })
                     } else {
                         buttonContent.textContent = 'Like';
                         buttonContent.setAttribute('data-liked', 'false');
+                        image.forEach(image => {
+                            image.classList.remove('fas');
+                            image.classList.add('far');
+                        })
                     }
                 } else {
                     alert('Une erreur est survenue.');
