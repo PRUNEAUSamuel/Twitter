@@ -32,7 +32,7 @@
 				</div>
 			{% else %}
 				{% for tweet in tweets %}
-					<div class="border border-1 border-secondary p-2">
+					<div class="border border-1 border-secondary p-2 d-flex flex-column">
 						<span>
 							{{ tweet.user.username }}
 							-
@@ -40,22 +40,17 @@
 													
 							{# {{ tweet.updateAt ? tweet.updateAt|date('d/m/Y H:i:s') : '' }} #}
 						</span>
-						<p class="p-2 text-break">{{ tweet.content }}</p>
-						<div>
-							<button class="btn btn-outline-danger fw-bold my-2 like-btn" id="like-button-{{ tweet.id }}" data-tweet-id="{{ tweet.id }}">
-								<span id="likes-count-{{ tweet.id }}">{{ tweet.likes | length }}</span>
-								{% if app.user and tweet.likes|filter(like => like.user.id == app.user.id)|length > 0 %}
-									<i class="like-img-{{ tweet.id }} fas fa-heart"></i>
-								{% else %}
-									<i class="like-img-{{ tweet.id }} far fa-heart"></i>
-								{% endif %}
-								<span class="like-{{tweet.id}}">
+						<p class="p-2 mt-3 mb-1 text-break">{{ tweet.content }}</p>
+						<div class="align-self-end">
+							<button class="btn btn-outline-danger fw-bold like-btn" id="like-button-{{ tweet.id }}" data-tweet-id="{{ tweet.id }}">
+								<div class="like-div-{{ tweet.id }}">	
+									<span id="likes-count-{{ tweet.id }}">{{ tweet.likes | length }}</span>
 									{% if app.user and tweet.likes|filter(like => like.user.id == app.user.id)|length > 0 %}
-										Dislike
+										<i class="like-img-{{ tweet.id }} fas fa-heart"></i>
 									{% else %}
-										Like
+										<i class="like-img-{{ tweet.id }} far fa-heart"></i>
 									{% endif %}
-								</span>
+								</div>
 							</button>
 						</div>
 					</div>

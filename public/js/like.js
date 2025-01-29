@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", function () {
         button.addEventListener('click', function (e) {
             const tweetId = button.getAttribute('data-tweet-id');
             const likesCountElement = document.getElementById('likes-count-' + tweetId);
-            const buttonContent = document.querySelector(`.like-${tweetId}`);
+            const buttonContent = document.querySelector('.like-div-' + tweetId);
             const image = document.querySelectorAll('.like-img-' + tweetId);
 
             // Déterminer si l'utilisateur a déjà liké ou non
@@ -30,14 +30,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
                     
                     if (data.liked) {
-                        buttonContent.textContent = 'Dislike';
                         buttonContent.setAttribute('data-liked', 'true');
                         image.forEach(image => {
                             image.classList.remove('far');
                             image.classList.add('fas');
                         })
                     } else {
-                        buttonContent.textContent = 'Like';
                         buttonContent.setAttribute('data-liked', 'false');
                         image.forEach(image => {
                             image.classList.remove('fas');
