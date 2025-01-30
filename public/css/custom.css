@@ -22,3 +22,12 @@
 .rt-btn:hover {
     background-color: #6c757d;
 }
+
+.comment-btn {
+    color: white;
+}
+
+.comment-btn:hover {
+    background-color: white;
+    color: black;
+}
