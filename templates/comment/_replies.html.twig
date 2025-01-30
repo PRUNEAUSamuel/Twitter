@@ -1,13 +1,13 @@
 
 {% for reply in comment.comments %}
-    <div class="reply" style="margin-left: 20px;">
+    <div class="reply p-3 mb-2 border-top  border-white rounded ms-4" style="margin-left: 20px;">
         <strong>{{ reply.user ? reply.user.username : 'Utilisateur inconnu' }} :</strong> {{ reply.content }}
 
         <!-- Lien pour répondre au commentaire -->
-        <a href="{{ path('app_comment_new', {'tweetId': tweet.id, 'parentCommentId': reply.id}) }}">Répondre</a>
+        <a href="{{ path('app_comment_new', {'tweetId': tweet.id, 'parentCommentId': reply.id}) }}" class="btn btn-sm btn-outline-info">Répondre</a>
 
         <!-- Affichage récursif des sous-réponses -->
-        <div class="replies" style="margin-left: 20px;">
+        <div class="replies mt-3" style="margin-left: 20px;">
             {% include 'comment/_replies.html.twig' with {'comment': reply, 'tweet': tweet} %}
         </div>
     </div>

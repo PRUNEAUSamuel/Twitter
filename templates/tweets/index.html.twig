@@ -40,7 +40,7 @@
 						</span>
 						<p class="p-2 mt-3 mb-1 text-break">{{ tweet.content }}</p>
 
-						<div class="comments">
+						<div class="comments mt-4">
 							{% if tweet.comments is not empty %}
 								<h4 class="mt-4">Commentaires :</h4>
 								<!-- Bouton pour afficher/masquer les commentaires -->
@@ -69,7 +69,7 @@
 						</div>
 						<!-- Formulaire pour ajouter un commentaire -->
 						{% if app.user %}
-							<a href="{{ path('app_comment_new', {'tweetId': tweet.id}) }}" class="btn border-white fw-bold comment-btn bouton">
+							<a href="{{ path('app_comment_new', {'tweetId': tweet.id}) }}" class="btn btn-sm w-25 border-white fw-bold comment-btn ">
 								<span>Commenter</span>
 								<i class="fa-regular fa-comment"></i>
 							</a>
