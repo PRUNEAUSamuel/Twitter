@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Retweeter
+{% endblock %}
+
+{% block body %}
+	<main class="w-50 mx-auto">
+
+		<section class="border border-1 border-secondary p-4">
+			<h2 class="text-center">Retweeter</h2>
+
+			<form action="{{ path('app_tweet_retweet', { id: tweet.id }) }}" method="POST">
+				<label for="retweet-content-{{ tweet.id }}">
+                    Ajouter un commentaire :
+                </label>
+				<input type="text" id="retweet-content-{{ tweet.id }}" name="retweet_content" placeholder="Ajoutez un message avant le retweet" />
+			<button type="submit" class="btn btn-outline-secondary btn-sm">Retweeter</button>
+		    </form>
+	    </section>
+</main>{% endblock %}
