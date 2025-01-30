@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Tweets;
+use App\Entity\Likes;
+use App\Entity\Retweet;
 use App\Form\TweetsType;
 use App\Repository\RetweetRepository;
 use App\Repository\TweetsRepository;
@@ -12,6 +14,7 @@ use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 
 #[Route('/tweets')]
@@ -97,9 +100,6 @@ final class TweetsController extends AbstractController
         ]);
     }
 
-
-
-
     //Confirmation de la suppression d'un tweet
 
     #[Route('/profile/tweet/{id}/confirm-delete', name: 'app_tweet_confirm_delete', methods: ['GET'])]
@@ -131,36 +131,50 @@ final class TweetsController extends AbstractController
         return $this->redirectToRoute('app_profile');
     }
 
+#[Route("/like/{tweetId}", name:"like_tweet", methods:["POST"])]
+public function like(int $tweetId, TweetsRepository $tweetRepository, Request $request, EntityManagerInterface $entityManager): JsonResponse
+{
+    $user = $this->getUser();  // L'utilisateur connecté
+    $tweet = $tweetRepository->find($tweetId);
+
+    if (!$tweet) {
+        return new JsonResponse(['status' => 'error', 'message' => 'Le tweet n\'existe pas.'], 400);
+    }
+
+    $existingLike = $tweet->getLikes()->filter(function($like) use ($user) {
+        return $like->getUser() === $user;
+    })->first();
+
+    if ($existingLike) {
+        // Retirer le like (dislike)
+        $entityManager->remove($existingLike);
+        $entityManager->flush();
+        $entityManager->refresh($tweet);
+
+        $likeCount = $tweet->getLikes()->count();
+
+        return new JsonResponse([
+            'status' => 'success',
+            'likesCount' => $likeCount,
+            'liked' => false, 
+        ]);
+    }
+
+    $like = new Likes();
+    $like->setUser($user);
+    $like->setTweet($tweet);
+
+    $entityManager->persist($like);
+    $entityManager->flush();
+    $entityManager->refresh($tweet);
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    return new JsonResponse([
+        'status' => 'success',
+        'likesCount' => $tweet->getLikes()->count(),
+        'liked' => true,
+    ]);
+}
 
     // Création d'un Retweet
     // #[Route('/{id}/retweet', name: 'app_tweet_retweet', methods: ['GET', 'POST'])]
@@ -192,6 +206,11 @@ final class TweetsController extends AbstractController
     //         return $this->redirectToRoute('app_tweets_index');
     //     }
         
+        return $this->render('tweets/retweet.html.twig', [
+            'tweet' => $tweet,
+        ]);
+    }
+}
     //     return $this->render('tweets/retweet.html.twig', [
     //         'tweet' => $tweet,
     //     ]);

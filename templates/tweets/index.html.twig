@@ -1,5 +1,12 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}Twitter > X{% endblock %}
+
+
+{% block javascripts %}
+	<script src="{{ asset('js/like.js') }}" defer></script>
+{% endblock %}
+
 {% block title %}Twitter > X
 {% endblock %}
 
@@ -24,6 +31,37 @@
 					</p>
 				</div>
 			{% else %}
+				{% for tweet in tweets %}
+					<div class="border border-1 border-secondary p-2 d-flex flex-column">
+						<span>
+							{{ tweet.user.username }} - {{ tweet.createdAt ? tweet.createdAt|date('d/m/Y H:i:s') : '' }}								
+							{# {{ tweet.updateAt ? tweet.updateAt|date('d/m/Y H:i:s') : '' }} #}
+						</span>
+						<p class="p-2 mt-3 mb-1 text-break">{{ tweet.content }}</p>
+						<div class="align-self-end d-flex">
+							<button onclick="window.location.href='#'" {% if not app.user %}disabled{% endif %} class="btn border-white fw-bold comment-btn bouton">
+								<span>1</span>
+								<i class="fa-regular fa-comment"></i>
+							</button>
+							<button onclick="window.location.href='{{ path('app_tweet_retweet', { id: tweet.id }) }}'" {% if not app.user %}disabled{% endif %} class="btn btn-outline-secondary fw-bold rt-btn bouton mx-2">
+								<span>{{ tweet.getRetweetCount() }}</span>
+								<i class="fa-solid fa-arrows-rotate"></i>
+							</button>
+							<button class="btn btn-outline-danger fw-bold like-btn bouton" {% if not app.user %}disabled{% endif %} id="like-button-{{ tweet.id }}" data-tweet-id="{{ tweet.id }}">
+								<div class="like-div-{{ tweet.id }}">	
+									<span id="likes-count-{{ tweet.id }}">{{ tweet.likes | length }}</span>
+									{% if app.user and tweet.likes|filter(like => like.user.id == app.user.id)|length > 0 %}
+										<i class="like-img-{{ tweet.id }} fas fa-heart"></i>
+									{% else %}
+										<i class="like-img-{{ tweet.id }} far fa-heart"></i>
+									{% endif %}
+								</div>
+							</button>
+						</div>
+					</div>
+				{% endfor %}
+			{% endif %}
+		</section>
 
 			
 
@@ -67,4 +105,5 @@
     </section>
 
 	</main>
+	
 {% endblock %}
