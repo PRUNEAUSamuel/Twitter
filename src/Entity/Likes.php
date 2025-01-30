@@ -13,10 +13,10 @@ class Likes
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'likes')]
+    #[ORM\ManyToOne(targetEntity:Users::class)]
     private ?users $user = null;
 
-    #[ORM\ManyToOne(inversedBy: 'likes')]
+    #[ORM\ManyToOne(targetEntity:Tweets::class, inversedBy:"likes")]
     private ?Tweets $tweet = null;
 
     public function getId(): ?int
