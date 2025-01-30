@@ -80,16 +80,18 @@ document.getElementById("logout-form").submit();
 					<div class="d-flex justify-content-center" style="flex-grow: 1;">
 						<div class="dropdown">
 							<div class="nav-link text-white  d-flex align-items-center" id="navbarDropdown">
-                            {% if app.user %}
-								{% if app.user.profilePicture %}
-									<img src="{{ asset('uploads/profile_pictures/' ~ app.user.profilePicture) }}" alt="Photo de profil" class="rounded-circle" width="80" height="80">
+								{% if app.user %}
+									{% if app.user.profilePicture %}
+										<img src="{{ asset('uploads/profile_pictures/' ~ app.user.profilePicture) }}" alt="Photo de profil" class="rounded-circle" width="80" height="80">
+									{% else %}
+										<i class="fas fa-user-circle" style="font-size: 30px;"></i>
+										{# Icône par défaut si pas de photo #}
+									{% endif %}
 								{% else %}
-									<i class="fas fa-user-circle" style="font-size: 30px;"></i>
-									{# Icône par défaut si pas de photo #}
+									<p>
+										Vous devez être connecté pour voir votre profil.
+									</p>
 								{% endif %}
-                            {% else %}  
-                                <p> Vous devez être connecté pour voir votre profil. </p>  
-                            {% endif %}    
 							</div>
 						</div>
 					</div>
@@ -103,6 +105,6 @@ document.getElementById("logout-form").submit();
 				</div>
 			</div>
 		</nav>
+		{% block body %}{% endblock %}
 	</body>
-	{% block body %}{% endblock %}
 </html>
