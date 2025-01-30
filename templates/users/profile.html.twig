@@ -87,24 +87,24 @@
 
 		<div>
 			<hr>
-			{% if tweets is empty %}
+			{% if allTweets is empty %}
 				<p>Vous n'avez pas encore publié de tweet.</p>
 
 			{% else %}
 				<ul class="list-group list-group-flush">
-					{% for tweet in tweets %}
+					{% for allTweet in allTweets %}
 						<li class="list-group-item text-white m-3">
 							<p>
 								<small>Publié le
-									{{ tweet.createdAt|date('d/m/Y H:i') }}</small>
+									{{ allTweet.createdAt|date('d/m/Y H:i') }}</small>
 							</p>
-							<p>{{ tweet.content }}</p>
+							<p>{{ allTweet.content }}</p>
 
 							<div class="d-flex justify-content-end align-items-center">
-								<a href="{{ path('app_tweet_edit', {'id': tweet.id}) }}" class="fs-7 btn btn-secondary m-3">Modifier mon tweet</a>
+								<a href="{{ path('app_tweet_edit', {'id': allTweet.id}) }}" class="fs-7 btn btn-secondary m-3">Modifier mon tweet</a>
 
-								<form method="get" action="{{ path('app_tweet_confirm_delete', {'id': tweet.id}) }}" style="display:inline;">
-									<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ tweet.id) }}">
+								<form method="get" action="{{ path('app_tweet_confirm_delete', {'id': allTweet.id}) }}" style="display:inline;">
+									<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ allTweet.id) }}">
 									<button type="submit" class="btn btn-secondary">Supprimer mon tweet</button>
 								</form>
 							</div>

@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\RetweetRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\Users;
 
 #[ORM\Entity(repositoryClass: RetweetRepository::class)]
 class Retweet
