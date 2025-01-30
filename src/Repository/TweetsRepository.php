@@ -31,7 +31,7 @@ class TweetsRepository extends ServiceEntityRepository
 
 
 
-    // Fonction mise dans le repository plutot que dans le Controller
+    // Fonction mise dans le repository plutot que dans le Controller pour regrouper tous les tweets et retweets
 
     public function findAllTweetsAndRetweets() : array
     {
@@ -49,10 +49,9 @@ class TweetsRepository extends ServiceEntityRepository
 
         
 
-
-
         //On fusionne les deux tableaux et on les trie avec usort
         $allTweets = array_merge($tweets, $retweets);
+        
         usort($allTweets, function($a,$b){
             return $b->getCreatedAt() <=> $a->getCreatedAt();
         });
@@ -92,4 +91,6 @@ class TweetsRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+
+
 }

@@ -37,22 +37,15 @@ final class RetweetController extends AbstractController{
         $retweet->setCreatedAt(new \DateTimeImmutable());
 
 
-        // $newTweet = new Tweets();
-        // $newTweet -> setUser($user);
-        // $newTweet -> setCreatedAt(new \DateTimeImmutable());
-
-
 
         if ($request -> isMethod('POST')) {
             $content = $request->request->get('retweet_content');
 
             if ($content) {
                 $retweet -> setContent($content);
-                // $newTweet -> setContent($content);
             }
 
             $entityManager -> persist($retweet);
-            // $entityManager -> persist($newTweet);
 
             $tweets->incrementRetweetCount();
             $entityManager->flush();
