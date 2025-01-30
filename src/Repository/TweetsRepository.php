@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Tweets;
+use App\Entity\Retweet;
 use App\Entity\Users;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -28,6 +29,32 @@ class TweetsRepository extends ServiceEntityRepository
         ->getResult();
     }
 
+
+    // Fonction mise dans le repository plutot que dans le Controller
+
+    public function findAllTweetsAndRetweets() : array
+    {
+
+        $tweets = $this->createQueryBuilder("tweet")
+        -> orderBy('tweet.createdAt', 'DESC')
+        ->getQuery()
+        ->getResult();
+
+        $retweets = $this->getEntityManager()->getRepository(Retweet::class) //Récupère la classe Retweet de RetweetRepository
+        ->createQueryBuilder("retweet")
+        -> orderBy('retweet.createdAt', 'DESC')
+        ->getQuery()
+        ->getResult();
+
+        //On fusionne les deux tableaux et on les trie avec usort
+        $allTweets = array_merge($tweets, $retweets);
+        usort($allTweets, function($a,$b){
+            return $b->getCreatedAt() <=> $a->getCreatedAt();
+        });
+
+        return $allTweets;
+        
+    }
 //    /**
 //     * @return Tweets[] Returns an array of Tweets objects
 //     */

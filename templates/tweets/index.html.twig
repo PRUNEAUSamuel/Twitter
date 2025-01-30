@@ -1,6 +1,7 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Twitter > X{% endblock %}
+{% block title %}Twitter > X
+{% endblock %}
 
 {% block body %}
 
@@ -17,25 +18,110 @@
 		</section>
 
 		<section>
-			{% if tweets is empty %}
+			{% if allTweets is empty %}
 				<div class="border border-1 border-secondary text-center">
 					<p>Aucun Tweet pour le moment ! N'hésites pas à en faire un !
 					</p>
 				</div>
 			{% else %}
-				{% for tweet in tweets %}
-					<div class="border border-1 border-secondary p-2">
-						<span>
-							{{ tweet.user.username }} - {{ tweet.createdAt ? tweet.createdAt|date('d/m/Y H:i:s') : '' }}								
-							{# {{ tweet.updateAt ? tweet.updateAt|date('d/m/Y H:i:s') : '' }} #}
-						</span>
-						<p class="p-2 text-break">{{ tweet.content }}</p>
-						<a href="{{ path('app_tweet_retweet', { id: tweet.id }) }}" class="btn btn-secondary"> Retweet </a>
-					</div>
-					
+
+
+				{% for allTweet in allTweets %}
+
+
+					{% if isRetweet %}
+						<div class="border border-1 border-secondary p-2">
+							<p>
+								{{retweet.user.username}}
+								le
+								{{ retweet.createdAt | date('d/m/Y H:i:s') }}
+							</p>
+							<p>{{retweet.content}}</p>
+
+							<div>
+								<p>{{tweet.user.username}}
+									-
+									{{tweet.createdAt|date('d/m/Y H:i:s') }}</p>
+								<p>{{tweet.content}}</p>
+								{# <a href="{{ path('app_tweet_show', {id: retweet.tweet.id}) }}">Voir le tweet original</a> #}
+							</div>
+						</div>
+
+					{% else %}
+
+						<div class="border border-1 border-secondary p-2">
+							<span>
+								{{ tweet.user.username }}
+								-
+								{{ tweet.createdAt|date('d/m/Y H:i:s') }}
+								{# {{ tweet.updateAt ? tweet.updateAt|date('d/m/Y H:i:s') : '' }} #}
+							</span>
+							<p class="p-2 text-break">{{ tweet.content }}</p>
+							{# <a href="{{ path('app_tweet_show', {id: tweet.id}) }}">Voir le tweet</a> #}
+							<a href="{{ path('app_tweet_retweet', { id: tweet.id }) }}" class="btn btn-secondary">
+								Retweeter
+							</a>
+						</div>
+
+					{% endif %}
 				{% endfor %}
 			{% endif %}
+
 		</section>
 	</main>
 
 {% endblock %}
+
+
+{# {% else %}
+<div class="border border-1 border-secondary p-2">
+	<p>
+		{{retweet.user.username}}
+		le
+		{{ retweet.createdAt | date('d/m/Y H:i:s') }}
+	</p>
+	{% if retweet.content %}
+		<p>{{retweet.content}}</p>
+	{% endif %}
+	<div>
+		<p>{{retweet.tweet.user.username}}
+			-
+			{{retweet.tweet.createdAt|date('d/m/Y H:i:s') }}</p>
+		<p>{{retweet.tweet.content}}</p> #}
+
+{# <a href="{{ path('app_tweet_show', {id: retweet.tweet.id}) }}">Voir le tweet original</a> #}
+{# </div>
+</div>
+{% for retweet in retweets %}
+	<div class="border border-1 border-secondary p-2">
+		<p>
+			{{retweet.user.username}}
+			le
+			{{ retweet.createdAt | date('d/m/Y H:i:s') }}
+		</p>
+		{% if retweet.content %}
+			<p>{{retweet.content}}</p>
+		{% endif %}
+
+		<div>
+			<p>{{retweet.tweet.user.username}}
+				-
+				{{retweet.tweet.createdAt|date('d/m/Y H:i:s') }}</p>
+			<p>{{retweet.tweet.content}}</p>
+		</div>
+	</div>
+{% endfor %}
+
+{% for tweet in tweets %}
+	<div class="border border-1 border-secondary p-2">
+		<span>
+			{{ tweet.user.username }}
+			-
+			{{ tweet.createdAt ? tweet.createdAt|date('d/m/Y H:i:s') : '' }}
+		</span>
+		<p class="p-2 text-break">{{ tweet.content }}</p>
+		<a href="{{ path('app_tweet_retweet', { id: tweet.id }) }}" class="btn btn-secondary">
+			Retweeter
+		</a>
+	</div>
+{% endfor %} #}
