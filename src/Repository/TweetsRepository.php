@@ -30,6 +30,7 @@ class TweetsRepository extends ServiceEntityRepository
     }
 
 
+
     // Fonction mise dans le repository plutot que dans le Controller
 
     public function findAllTweetsAndRetweets() : array
@@ -46,6 +47,10 @@ class TweetsRepository extends ServiceEntityRepository
         ->getQuery()
         ->getResult();
 
+        
+
+
+
         //On fusionne les deux tableaux et on les trie avec usort
         $allTweets = array_merge($tweets, $retweets);
         usort($allTweets, function($a,$b){
@@ -55,6 +60,14 @@ class TweetsRepository extends ServiceEntityRepository
         return $allTweets;
         
     }
+
+
+
+
+
+
+
+
 //    /**
 //     * @return Tweets[] Returns an array of Tweets objects
 //     */

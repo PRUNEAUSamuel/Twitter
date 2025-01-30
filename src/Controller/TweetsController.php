@@ -20,10 +20,20 @@ final class TweetsController extends AbstractController
     #[Route(name: 'app_tweets_index', methods: ['GET'])]
     public function index(TweetsRepository $tweetsRepository,RetweetRepository $retweetRepository): Response
     {
-        $allTweets = $tweetsRepository->findAllTweetsAndRetweets();
+        $tweets = $tweetsRepository->findBy([], ['createdAt' => 'DESC']);
+        $retweets = $retweetRepository->findBy([], ['createdAt' => 'DESC']);
+
+        $allTweets= array_merge($tweets, $retweets);
+
+        usort($allTweets, function($a,$b){
+            return $b->getCreatedAt() <=> $a->getCreatedAt();
+        });
+
 
         return $this->render('tweets/index.html.twig', [
             'allTweets' => $allTweets,
+            'tweets' => $tweetsRepository->findBy([], ['createdAt' => 'DESC']),
+            'retweets' => $retweetRepository->findBy([], ['createdAt' => 'DESC']),
         ]);
     }
 
