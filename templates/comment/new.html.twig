@@ -5,7 +5,7 @@
 {% block body %}
     <h1>Create new Comment</h1>
 
-    {{ include('comment/_form.html.twig') }}
+    {{ include('comment/_form.html.twig' , { 'tweet': tweet }) }}
 
     <a href="{{ path('app_comment_index') }}">back to list</a>
 {% endblock %}

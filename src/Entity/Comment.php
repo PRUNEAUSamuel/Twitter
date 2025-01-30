@@ -20,7 +20,7 @@ class Comment
     private ?string $content = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $createAt = null;
+    private ?\DateTimeInterface $createdAt = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $updateAt = null;
@@ -44,7 +44,7 @@ class Comment
     public function __construct()
     {
         $this->comments = new ArrayCollection();
-        $this->createAt = new \DateTimeImmutable();
+        $this->createdAt = new \DateTimeImmutable();
         $this->updateAt = new \DateTime();
     }
 
@@ -65,14 +65,14 @@ class Comment
         return $this;
     }
 
-    public function getCreateAt(): ?\DateTimeInterface
+    public function getCreatedAt(): ?\DateTimeInterface
     {
-        return $this->createAt;
+        return $this->createdAt;
     }
 
-    public function setCreateAt(\DateTimeInterface $createAt): static
+    public function setCreatedAt(\DateTimeInterface $createdAt): static
     {
-        $this->createAt = $createAt;
+        $this->createdAt = $createdAt;
 
         return $this;
     }
