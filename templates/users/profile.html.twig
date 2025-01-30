@@ -1,101 +1,120 @@
 {% extends 'base.html.twig' %}
 
 
+{% block body %}
+	<div class="container mt-5">
+		<div
+			class="row justify-content-center">
+			<!-- Profil Container -->
+			<div
+				class="col-12 col-md-8">
+				<!-- Profile Header -->
+				<div class="text-center mb-4">
+					<h2 class="display-4 text-white">{{ user.username }}</h2>
+					<p class="text-white">Mon profil</p>
+				</div>
 
-        {% block body %}
-    <div class="container mt-5">
-        <div class="row justify-content-center">
-            <!-- Profil Container -->
-            <div class="col-12 col-md-8">
-                <!-- Profile Header -->
-                <div class="text-center mb-4">
-                    <h2 class="display-4 text-white">{{ user.username }}</h2>
-                    <p class="text-white">Mon profil</p>
-                </div>
+				<!-- Photo de Profil et Informations -->
+				<div class="text-center mb-4">
+					<div class="profile-picture">
+						{% if user.profilePicture %}
+							<img src="{{ asset('uploads/profile_pictures/' ~ user.profilePicture) }}" alt="Photo de profil" class="img-fluid rounded-circle border-none">
+						{% else %}
+							<i class="fas fa-user-circle" style="font-size: 30px;"></i>
+						{% endif %}
+					</div>
+					<div class="mt-3">
+						<h4 class="text-white">{{ user.username }}</h4>
+						<p class="text-white">{{ user.email }}</p>
+					</div>
+				</div>
 
-                <!-- Photo de Profil et Informations -->
-                <div class="text-center mb-4">
-                    <div class="profile-picture">
-                        {% if user.profilePicture %}
-                            <img src="{{ asset('uploads/profile_pictures/' ~ user.profilePicture) }}" alt="Photo de profil" class="img-fluid rounded-circle border-none" >
-                        {% else %}
-                            <img src="{{ asset('images/default-profile.png') }}" alt="Photo de profil" class="img-fluid rounded-circle border" width="150">
-                        {% endif %}
-                    </div>
-                    <div class="mt-3">
-                        <h4 class="text-white">{{ user.username }}</h4>
-                        <p class="text-white">{{ user.email }}</p>
-                    </div>
-                </div>
+				<!-- Modifier le profil -->
+				<div class="text-center">
+					<a href="{{ path('app_profile_edit') }}" class="btn btn-primary mb-3">Modifier mon profil</a>
+				</div>
 
-                <!-- Modifier le profil -->
-                <div class="text-center">
-                    <a href="{{ path('app_profile_edit') }}" class="btn btn-primary mb-3">Modifier mon profil</a>
-                </div>
-
-                <!-- Flash Messages -->
-                {% for label, messages in app.flashes %}
-                    <div class="alert alert-{{ label }}  alert-dismissible fade show mt-4" role="alert" >
-                        {% for message in messages %}
-                            <p>{{ message }}</p>
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        {% endfor %}
-                    </div>
-                {% endfor %}
-
-                <!-- Suppression du Profil -->
-                <form action="{{ path('app_profile_delete') }}" method="post" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer votre profil ?');" class="mt-4">
-                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
-                    <button type="submit" class="btn btn-danger d-block mx-auto mt-4">Supprimer mon profil</button>
-                </form>
-            </div>
-        </div>
-    </div>
-
-
-
-		<section class="d-flex flex-column justify-content-center align-items-center">
-
-			<div class="m-5 d-flex flex-column justify-content-center align-items-center">
-				<h3 class="mb-5">⇩ Clique ici pour partager ton prochain tweet ! ⇩</h3>
-				<a href="{{ path('app_tweet_new') }}" class="btn btn-secondary">Publier un tweet</a>
-			</div>
-
-
-			<div class="mt-5">
-				<h3>Mes dernières publications</h3>
-			</div>
-
-			<div>
-				<hr>
-				{% if tweets is empty %}
-					<p>Vous n'avez pas encore publié de tweet.</p>
-
-				{% else %}
-					<ul class="list-group list-group-flush">
-						{% for tweet in tweets %}
-							<li class="list-group-item text-white m-3">
-								<p>
-									<small>Publié le
-										{{ tweet.createdAt|date('d/m/Y H:i') }}</small>
-								</p>
-								<p>{{ tweet.content }}</p>
-
-								<div class="d-flex justify-content-end align-items-center">
-									<a href="{{ path('app_tweet_edit', {'id': tweet.id}) }}" class="fs-7 btn btn-secondary m-3">Modifier mon tweet</a>
-
-									<form method="get" action="{{ path('app_tweet_confirm_delete', {'id': tweet.id}) }}" style="display:inline;">
-										<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ tweet.id) }}">
-										<button type="submit" class="btn btn-secondary">Supprimer mon tweet</button>
-									</form>
-								</div>
-
-							</li>
+				<!-- Flash Messages -->
+				{% for label, messages in app.flashes %}
+					<div class="alert alert-{{ label }}  alert-dismissible fade show mt-4" role="alert">
+						{% for message in messages %}
+							<p>{{ message }}</p>
+							<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 						{% endfor %}
-					</ul>
-				{% endif %}
+					</div>
+				{% endfor %}
+
+				<button type="button" class="btn btn-danger d-block mx-auto mt-4" data-bs-toggle="modal" data-bs-target="#deleteProfileModal">
+					Supprimer mon profil
+				</button>
+				<!-- Modal de confirmation de suppression -->
+				<div class="modal fade" id="deleteProfileModal" tabindex="-1" aria-labelledby="deleteProfileModalLabel" aria-hidden="true">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title" id="deleteProfileModalLabel">Êtes-vous sûr ?</h5>
+								<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+							</div>
+							<div class="modal-body">
+								<p>Cette action supprimera définitivement votre profil et toutes les données associées. Voulez-vous continuer ?</p>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+								<form action="{{ path('app_profile_delete') }}" method="post" class="d-inline">
+									<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
+									<button type="submit" class="btn btn-danger">Supprimer mon profil</button>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
-		</section>
+		</div>
+	</div>
 
 
-	{% endblock %}
+	<section class="d-flex flex-column justify-content-center align-items-center">
+
+		<div class="m-5 d-flex flex-column justify-content-center align-items-center">
+			<h3 class="mb-5">⇩ Clique ici pour partager ton prochain tweet ! ⇩</h3>
+			<a href="{{ path('app_tweet_new') }}" class="btn btn-secondary">Publier un tweet</a>
+		</div>
+
+
+		<div class="mt-5">
+			<h3>Mes dernières publications</h3>
+		</div>
+
+		<div>
+			<hr>
+			{% if tweets is empty %}
+				<p>Vous n'avez pas encore publié de tweet.</p>
+
+			{% else %}
+				<ul class="list-group list-group-flush">
+					{% for tweet in tweets %}
+						<li class="list-group-item text-white m-3">
+							<p>
+								<small>Publié le
+									{{ tweet.createdAt|date('d/m/Y H:i') }}</small>
+							</p>
+							<p>{{ tweet.content }}</p>
+
+							<div class="d-flex justify-content-end align-items-center">
+								<a href="{{ path('app_tweet_edit', {'id': tweet.id}) }}" class="fs-7 btn btn-secondary m-3">Modifier mon tweet</a>
+
+								<form method="get" action="{{ path('app_tweet_confirm_delete', {'id': tweet.id}) }}" style="display:inline;">
+									<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ tweet.id) }}">
+									<button type="submit" class="btn btn-secondary">Supprimer mon tweet</button>
+								</form>
+							</div>
+						</li>
+					{% endfor %}
+				</ul>
+			{% endif %}
+		</div>
+	</section>
+
+</main>
+
+{% endblock %}

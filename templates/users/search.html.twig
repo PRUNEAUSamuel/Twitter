@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+	<div class="container mt-5">
+		<div class="row justify-content-center">
+			<div class="col-md-8">
+				<h1 class="text-center text-white mb-4">Recherche d'utilisateur</h1>
+
+				{# Formulaire de recherche dans la navbar #}
+				<div class="card shadow-sm mb-4">
+					<div class="card-body">
+						{{ form_start(form) }}
+						<div class="input-group">
+							<input type="text" class="form-control text-white" placeholder="Rechercher des utilisateurs" aria-label="Recherche" {{ form_widget(form.query, { 'value': query } ) }}/>
+							<button class="btn btn-primary" type="submit">
+								<i class="fas fa-search"></i>Rechercher</button>
+						</div>
+						{{ form_end(form) }}
+					</div>
+				</div>
+
+				{# Affichage des résultats de recherche #}
+				<div class="results-section">
+					{% if users is not empty %}
+						<div class="card shadow-sm">
+							<div class="card-body">
+								<h3 class="card-title text-white">Résultats :</h3>
+								<ul class="list-group ">
+									{% for user in users %}
+										<li class="list-group-item d-flex justify-content-between align-items-center">
+											<a href="{{ path('app_user_profile', {'id': user.id}) }}" class="text-white">
+												<strong>{{ user.username }}</strong>
+											</a>
+										</li>
+									{% endfor %}
+								</ul>
+							</div>
+						</div>
+					{% else %}
+						<p class="alert alert-warning mt-4" role="alert">>Aucun utilisateur trouvé.</p>
+					{% endif %}
+				</div>
+			</div>
+		</div>
+	{% endblock %}

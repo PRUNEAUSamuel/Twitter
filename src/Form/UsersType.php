@@ -32,6 +32,7 @@ class UsersType extends AbstractType
             ])
             ->add('oldPassword', PasswordType::class,[
                 'label' => 'Ancien mot de passe',
+                'required' => false,
                 'mapped' => false,
                 'attr' => ['autocomplete' => 'current-password'],
                 'required' => false,

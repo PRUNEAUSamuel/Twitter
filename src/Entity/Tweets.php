@@ -40,7 +40,8 @@ class Tweets
     private ?string $content = null;
 
 
-
+    #[ORM\Column(type: 'integer')]
+    private int $retweetCount = 0;
 
 
     public function __construct()
@@ -130,6 +131,27 @@ class Tweets
             }
         }
 
+        return $this;
+    }
+
+
+
+    public function getRetweetCount(): int
+    {
+        return $this->retweetCount; // Nb total pour un tweet
+    }
+
+    public function incrementRetweetCount(): static
+    {
+        $this->retweetCount++; //Incrémente le compteur de 1
+        return $this;
+    }
+
+    public function decrementRetweetCount(): static
+    { //Si compteur >0 : on décrémente de 1
+        if ($this->retweetCount > 0) { 
+            $this->retweetCount--;
+        }
         return $this;
     }
 }

@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Retweeter{% endblock %}
+
+{% block body %}
+<main>
+    <section>
+        <h2>Retweeter</h2>
+
+        <form action="{{ path('app_tweet_retweet', { id: tweet.id }) }}" method="POST">
+            <div>
+                <label for="retweet-content-{{ tweet.id }}"> Retweeter ici :</label>
+                <input 
+                    type="text"
+                    id="retweet-content-{{ tweet.id }}" 
+                    name="retweet_content" 
+                    maxlength="255"
+                />
+            </div>
+            <button type="submit">Retweeter</button>
+        </form>
+    </section>
+</main>
+{% endblock %}

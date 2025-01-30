@@ -13,11 +13,9 @@
 	<main class="w-50  mx-auto">
 
 		<section class="border border-1 border-secondary text-center p-5">
-
 			<a class="text-decoration-none text-white" href="{{path('app_tweets_index')}}">
 				<h2>Twitter > X</h2>
 			</a>
-
 		</section>
 
 		<section class="border border-1 border-secondary text-center p-2">
@@ -27,17 +25,14 @@
 		<section>
 			{% if tweets is empty %}
 				<div class="border border-1 border-secondary text-center">
-					<span>Aucun Tweet pour le moment ! N'hésites pas à en faire un !
-					</span>
+					<p>Aucun Tweet pour le moment ! N'hésites pas à en faire un !
+					</p>
 				</div>
 			{% else %}
 				{% for tweet in tweets %}
 					<div class="border border-1 border-secondary p-2 d-flex flex-column">
 						<span>
-							{{ tweet.user.username }}
-							-
-							{{ tweet.createdAt ? tweet.createdAt|date('d/m/Y H:i:s') : '' }}
-													
+							{{ tweet.user.username }} - {{ tweet.createdAt ? tweet.createdAt|date('d/m/Y H:i:s') : '' }}								
 							{# {{ tweet.updateAt ? tweet.updateAt|date('d/m/Y H:i:s') : '' }} #}
 						</span>
 						<p class="p-2 mt-3 mb-1 text-break">{{ tweet.content }}</p>
@@ -53,7 +48,10 @@
 								</div>
 							</button>
 						</div>
+						<p class="p-2 text-break">{{ tweet.content }}</p>
+						<a href="{{ path('app_tweet_retweet', { id: tweet.id }) }}" class="btn btn-secondary"> Retweet </a>
 					</div>
+					
 				{% endfor %}
 			{% endif %}
 		</section>
