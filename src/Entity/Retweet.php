@@ -82,11 +82,4 @@ class Retweet
     public function isRetweet() : bool {
         return true;
     }
-
-
-
 }
-
-
-
-

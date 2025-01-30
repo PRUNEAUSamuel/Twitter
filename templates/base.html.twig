@@ -23,6 +23,22 @@
                 <div class="w-100 d-flex align-items-center" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto fw-bold flex-row align-items-end">
                         <li class="nav-item mx-3">
+                            <div class="d-flex justify-content-center" style="flex-grow: 1;">
+                                <div class="dropdown">
+                                    <div class="nav-link text-white d-flex align-items-center p-0" id="navbarDropdown">
+                                        {% if app.user %}
+                                            {% if app.user.profilePicture %}
+                                                <img src="{{ asset('uploads/profile_pictures/' ~ app.user.profilePicture) }}" alt="Photo de profil" class="rounded-circle" width="40" height="40">
+                                            {% else %}
+                                                <i class="fas fa-user-circle" style="font-size: 30px;"></i>
+                                                {# Icône par défaut si pas de photo #}
+                                            {% endif %}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="nav-item mx-3">
                             <a class="nav-link text-white" href="{{ path('app_tweets_index') }}">Accueil</a>
                         </li>
                         <li class="nav-item mx-3">
@@ -73,20 +89,6 @@
                             {% endif %}
                         </li>
                     </ul>
-                    <div class="d-flex justify-content-center" style="flex-grow: 1;">
-						<div class="dropdown">
-							<div class="nav-link text-white  d-flex align-items-center" id="navbarDropdown">
-								{% if app.user %}
-									{% if app.user.profilePicture %}
-										<img src="{{ asset('uploads/profile_pictures/' ~ app.user.profilePicture) }}" alt="Photo de profil" class="rounded-circle" width="80" height="80">
-									{% else %}
-										<i class="fas fa-user-circle" style="font-size: 30px;"></i>
-										{# Icône par défaut si pas de photo #}
-									{% endif %}
-								{% endif %}
-							</div>
-						</div>
-					</div>
                     <form class="d-flex" role="search">
                         <div class="form-floating mx-1">
                             <input type="search" class="form-control me-2 border-secondary text-white" id="floatingSearch" placeholder="" aria-label="Search">
