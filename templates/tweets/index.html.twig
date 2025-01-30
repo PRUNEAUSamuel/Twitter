@@ -1,124 +1,104 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Twitter > X
-{% endblock %}
+{% block title %}Twitter > X{% endblock %}
 
 {% block javascripts %}
 	<script src="{{ asset('js/like.js') }}" defer></script>
 {% endblock %}
 
+
 {% block body %}
-<<<<<<< HEAD
 	<main class="w-75 mx-auto d-flex flex-column align-items-center">
 		<h1 class="my-5">Twitter > X</h1>
 		<section class="w-75">
-			{% if tweets is empty %}
-=======
-
-	<main class="w-50  mx-auto">
-
-		<section class="border border-1 border-secondary text-center p-5">
-			<a class="text-decoration-none text-white" href="{{path('app_tweets_index')}}">
-				<h2>Twitter > X</h2>
-			</a>
-		</section>
-
-		<section class="border border-1 border-secondary text-center p-2">
-			<a class="text-decoration-none text-white" href="{{ path('app_tweet_new') }}">Poster un Tweet</a>
-		</section>
-
-		<section>
 			{% if allTweets is empty %}
->>>>>>> 8aa95fdb37575d6b77b405846ebf8a8b633b3b61
 				<div class="border border-1 border-secondary text-center">
-					<p>Aucun Tweet pour le moment ! N'hésites pas à en faire un !
-					</p>
+					<p>Aucun Tweet pour le moment ! N'hésites pas à en faire un !</p>
 				</div>
 			{% else %}
-<<<<<<< HEAD
-				{% for tweet in tweets %}
-					<div class="border border-1 border-secondary p-2 my-3 d-flex flex-column">
-						<span>
-							<span class="pe-2">
-								{% if app.user.profilePicture %}
-									<img src="{{ asset('uploads/profile_pictures/' ~ app.user.profilePicture) }}" alt="Photo de profil" class="rounded-circle" width="40" height="40">
-								{% else %}
-									<i class="fas fa-user-circle" style="font-size: 30px;"></i>
-									{# Icône par défaut si pas de photo #}
-								{% endif %}
-							</span>
-							{{ tweet.user.username }} - {{ tweet.createdAt ? tweet.createdAt|date('d/m/Y H:i:s') : '' }}								
-							{# {{ tweet.updateAt ? tweet.updateAt|date('d/m/Y H:i:s') : '' }} #}
-						</span>
-						<p class="p-2 mt-3 mb-1 text-break">{{ tweet.content }}</p>
-						<div class="align-self-end d-flex">
-							<button onclick="window.location.href='#'" {% if not app.user %}disabled{% endif %} class="btn border-white fw-bold comment-btn bouton">
-								<span>1</span>
-								<i class="fa-regular fa-comment"></i>
-							</button>
-							<button onclick="window.location.href='{{ path('app_tweet_retweet', { id: tweet.id }) }}'" {% if not app.user %}disabled{% endif %} class="btn btn-outline-secondary fw-bold rt-btn bouton mx-2">
-								<span>{{ tweet.getRetweetCount() }}</span>
-								<i class="fa-solid fa-arrows-rotate"></i>
-							</button>
-							<button class="btn btn-outline-danger fw-bold like-btn bouton" {% if not app.user %}disabled{% endif %} id="like-button-{{ tweet.id }}" data-tweet-id="{{ tweet.id }}">
-								<div class="like-div-{{ tweet.id }}">	
-									<span id="likes-count-{{ tweet.id }}">{{ tweet.likes | length }}</span>
-									{% if app.user and tweet.likes|filter(like => like.user.id == app.user.id)|length > 0 %}
-										<i class="like-img-{{ tweet.id }} fas fa-heart"></i>
+				{% for allTweet in allTweets %}
+					<div class="border border-1 border-secondary p-2 my-3 d-flex flex-column rounded-2">
+						{% if allTweet.isRetweet() %}
+							<span>
+								<span class="pe-2">
+									{% if app.user.profilePicture %}
+										<img src="{{ asset('uploads/profile_pictures/' ~ app.user.profilePicture) }}" alt="Photo de profil" class="rounded-circle" width="40" height="40">
 									{% else %}
-										<i class="like-img-{{ tweet.id }} far fa-heart"></i>
+										<i class="fas fa-user-circle" style="font-size: 30px;"></i>
 									{% endif %}
-								</div>
-							</button>
-						</div>
+								</span>
+								{{ allTweet.user.username }} - {{ allTweet.createdAt|date('d/m/Y H:i:s') }}								
+							</span>
+							<p class="p-2 t-1 mb-2 text-break">{{ allTweet.content }}</p>
+							<div class="border border-1 border-secondary p-2 m-2 rounded-1">
+								<span>
+									<span class="pe-2">
+										{% if app.user.profilePicture %}
+											<img src="{{ asset('uploads/profile_pictures/' ~ app.user.profilePicture) }}" alt="Photo de profil" class="rounded-circle" width="40" height="40">
+										{% else %}
+											<i class="fas fa-user-circle" style="font-size: 30px;"></i>
+										{% endif %}
+									</span>
+									{{ allTweet.tweet.user.username }} - {{ allTweet.tweet.createdAt|date('d/m/Y H:i:s') }}								
+								</span>
+								<p class="p-2 t-1 mb-2 text-break">{{ allTweet.tweet.content }}</p>
+							</div>
+							<div class="justify-content-end d-flex">
+								<button onclick="window.location.href='#'" {% if not app.user %}disabled{% endif %} class="btn border-white fw-bold comment-btn bouton">
+									<span>1</span>
+									<i class="fa-regular fa-comment"></i>
+								</button>
+								<button onclick="window.location.href='{{ path('app_tweet_retweet', { id: allTweet.tweet.id }) }}'" {% if not app.user %}disabled{% endif %} class="btn btn-outline-secondary fw-bold rt-btn bouton mx-2">
+									<span>{{ allTweet.tweet.getRetweetCount() }}</span>
+									<i class="fa-solid fa-arrows-rotate"></i>
+								</button>
+								<button class="btn btn-outline-danger fw-bold like-btn bouton" {% if not app.user %}disabled{% endif %} id="like-button-{{ allTweet.id }}" data-tweet-id="{{ allTweet.id }}">
+									<div class="like-div-{{ allTweet.id }}">	
+										<span id="likes-count-{{ allTweet.id }}">{{ allTweet.tweet.likes | length }}</span>
+										{% if app.user and allTweet.tweet.likes|filter(like => like.user.id == app.user.id)|length > 0 %}
+											<i class="like-img-{{ allTweet.id }} fas fa-heart"></i>
+										{% else %}
+											<i class="like-img-{{ allTweet.id }} far fa-heart"></i>
+										{% endif %}
+									</div>
+								</button>
+							</div>
+						{% else %}
+							<span>
+								<span class="pe-2">
+									{% if app.user.profilePicture %}
+										<img src="{{ asset('uploads/profile_pictures/' ~ app.user.profilePicture) }}" alt="Photo de profil" class="rounded-circle" width="40" height="40">
+									{% else %}
+										<i class="fas fa-user-circle" style="font-size: 30px;"></i>
+									{% endif %}
+								</span>
+								{{ allTweet.user.username }} - {{ allTweet.createdAt|date('d/m/Y H:i:s') }}								
+							</span>
+							<p class="p-2 mt-1 mb-2 text-break">{{ allTweet.content }}</p>
+							<div class="justify-content-end d-flex">
+								<button onclick="window.location.href='#'" {% if not app.user %}disabled{% endif %} class="btn border-white fw-bold comment-btn bouton">
+									<span>1</span>
+									<i class="fa-regular fa-comment"></i>
+								</button>
+								<button onclick="window.location.href='{{ path('app_tweet_retweet', { id: allTweet.id }) }}'" {% if not app.user %}disabled{% endif %} class="btn btn-outline-secondary fw-bold rt-btn bouton mx-2">
+									<span>{{ allTweet.getRetweetCount() }}</span>
+									<i class="fa-solid fa-arrows-rotate"></i>
+								</button>
+								<button class="btn btn-outline-danger fw-bold like-btn bouton" {% if not app.user %}disabled{% endif %} id="like-button-{{ allTweet.id }}" data-tweet-id="{{ allTweet.id }}">
+									<div class="like-div-{{ allTweet.id }}">	
+										<span id="likes-count-{{ allTweet.id }}">{{ allTweet.likes | length }}</span>
+										{% if app.user and allTweet.likes|filter(like => like.user.id == app.user.id)|length > 0 %}
+											<i class="like-img-{{ allTweet.id }} fas fa-heart"></i>
+										{% else %}
+											<i class="like-img-{{ allTweet.id }} far fa-heart"></i>
+										{% endif %}
+									</div>
+								</button>
+							</div>
+						{% endif %}
 					</div>
 				{% endfor %}
 			{% endif %}
 		</section>
 	</main>
 {% endblock %}
-=======
-				
-
-		{% for allTweet in allTweets %}
-			<div class="border border-1 border-secondary p-2 mb-2">
-				{% if allTweet.isRetweet() %}
-					{# IsRetweet=true #}
-					<p>
-						{{ allTweet.user.username }}
-						a retweeté le
-						{{ allTweet.createdAt|date('d/m/Y H:i:s') }}
-					</p>
-					{% if allTweet.content %}
-						<p>{{ allTweet.content }}</p>
-					{% endif %}
-					<a href="{{ path('app_tweet_retweet', { id: allTweet.tweet.id }) }}" class="btn btn-secondary">
-						Retweeter
-					</a>
-
-					<div class="border border-1 border-secondary p-2">
-						<p>
-							<strong>{{ allTweet.tweet.user.username }}</strong>
-							-
-							{{ allTweet.tweet.createdAt|date('d/m/Y H:i:s') }}
-						</p>
-						<p>{{ allTweet.tweet.content }}</p>
-					</div>
-
-				{% else %}
-					{# isretweet = false #}
-					<p>
-						<strong>{{ allTweet.user.username }}</strong>
-						-
-						{{ allTweet.createdAt|date('d/m/Y H:i:s') }}
-					</p>
-					<p>{{ allTweet.content }}</p>
-					<a href="{{ path('app_tweet_retweet', { id: allTweet.id }) }}" class="btn btn-secondary">
-						Retweeter
-					</a>
-				{% endif %}
-			</div>
-		{% endfor %}
-	{% endif %}
-</section></main>{% endblock %}
->>>>>>> 8aa95fdb37575d6b77b405846ebf8a8b633b3b61
