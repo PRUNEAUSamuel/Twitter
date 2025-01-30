@@ -36,8 +36,11 @@
 							{# {{ tweet.updateAt ? tweet.updateAt|date('d/m/Y H:i:s') : '' }} #}
 						</span>
 						<p class="p-2 mt-3 mb-1 text-break">{{ tweet.content }}</p>
-						<div class="align-self-end">
-							<button class="btn btn-outline-danger fw-bold like-btn" id="like-button-{{ tweet.id }}" data-tweet-id="{{ tweet.id }}">
+						<div class="align-self-end d-flex">
+							<div>
+								<a href="{{ path('app_tweet_retweet', { id: tweet.id }) }}" class="btn btn-outline-secondary fw-bold rt-btn bouton mx-2"><i class="fa-solid fa-arrows-rotate"></i></a>
+							</div>
+							<button class="btn btn-outline-danger fw-bold like-btn bouton" id="like-button-{{ tweet.id }}" data-tweet-id="{{ tweet.id }}">
 								<div class="like-div-{{ tweet.id }}">	
 									<span id="likes-count-{{ tweet.id }}">{{ tweet.likes | length }}</span>
 									{% if app.user and tweet.likes|filter(like => like.user.id == app.user.id)|length > 0 %}
@@ -48,10 +51,7 @@
 								</div>
 							</button>
 						</div>
-						<p class="p-2 text-break">{{ tweet.content }}</p>
-						<a href="{{ path('app_tweet_retweet', { id: tweet.id }) }}" class="btn btn-secondary"> Retweet </a>
 					</div>
-					
 				{% endfor %}
 			{% endif %}
 		</section>

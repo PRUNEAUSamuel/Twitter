@@ -87,9 +87,6 @@ final class TweetsController extends AbstractController
         ]);
     }
 
-
-
-
     //Confirmation de la suppression d'un tweet
 
     #[Route('/profile/tweet/{id}/confirm-delete', name: 'app_tweet_confirm_delete', methods: ['GET'])]
@@ -166,38 +163,6 @@ public function like(int $tweetId, TweetsRepository $tweetRepository, Request $r
     ]);
 }
 
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     // Création d'un Retweet
     #[Route('/{id}/retweet', name: 'app_tweet_retweet', methods: ['GET', 'POST'])]
     public function retweet(Request $request, Tweets $tweet, EntityManagerInterface $entityManager): Response
@@ -232,29 +197,4 @@ public function like(int $tweetId, TweetsRepository $tweetRepository, Request $r
             'tweet' => $tweet,
         ]);
     }
-
-
-    // Suppresion d'un retweet
-    // #[Route('/retweet/{id}/delete', name: 'app_retweet_delete', methods: ['POST'])]
-    // public function deleteRetweet(Tweets $retweet, EntityManagerInterface $entityManager): Response
-    // {
-    //     if (str_contains($retweet->getContent(), "--- Retweet ---")) {
-    //         // Extraire le contenu du tweet original
-    //         $originalContent = explode("--- Retweet ---", $retweet->getContent())[1] ?? null;
-
-    //         if ($originalContent) {
-    //             $originalTweet = $entityManager->getRepository(Tweets::class)
-    //                 ->findOneBy(['content' => trim($originalContent)]);
-
-    //             if ($originalTweet) {
-    //                 $originalTweet->decrementRetweetCount();
-    //             }
-    //         }
-    //     }
-
-    //     $entityManager->remove($retweet);
-    //     $entityManager->flush();
-
-    //     return $this->redirectToRoute('app_tweets_index');
-    // }
 }

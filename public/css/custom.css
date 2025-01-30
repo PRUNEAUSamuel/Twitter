@@ -3,15 +3,22 @@
     border-color: red
 }
 
-.like-btn {
+.bouton {
     transition: transform 0.2s ease, background-color 0.2s ease;
 }
 
-.like-btn:hover {
+.bouton:hover {
     transform: scale(1.1);
-    background-color: #ff4d4d;  /* Couleur rouge */
 }
 
-.like-btn:active {
+.bouton:active {
     transform: scale(0.95);
+}
+
+.like-btn:hover {
+    background-color: #ff4d4d;
+}
+
+.rt-btn:hover {
+    background-color: #6c757d;
 }
