@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\Users;
-use App\Repository\TweetsRepository;
 use App\Form\UsersType;
 use App\Form\SearchType;
 use App\Repository\UsersRepository;
@@ -146,7 +145,6 @@ final class UsersController extends AbstractController
                 $user->setEmail($email);
             }
 
-            /** @var UploadedFile $photoFile */
             $photoFile = $form->get('profilePicture')->getData();
 
             if ($photoFile) {

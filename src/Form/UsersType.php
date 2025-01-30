@@ -35,6 +35,7 @@ class UsersType extends AbstractType
                 'required' => false,
                 'mapped' => false,
                 'attr' => ['autocomplete' => 'current-password'],
+                'required' => false,
             ])
             ->add('password', PasswordType::class, [
                 // instead of being set onto the object directly,

@@ -33,6 +33,7 @@ class Tweets
      * @var Collection<int, Likes>
      */
     #[ORM\OneToMany(targetEntity: Likes::class, mappedBy: 'tweet')]
+    #[ORM\JoinColumn(nullable: false)]
     private Collection $likes;
 
     #[ORM\Column(length: 255)]
