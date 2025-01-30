@@ -2,27 +2,15 @@
 
 {% block title %}Twitter > X{% endblock %}
 
-
 {% block javascripts %}
 	<script src="{{ asset('js/like.js') }}" defer></script>
 {% endblock %}
 
 
 {% block body %}
-
-	<main class="w-50  mx-auto">
-
-		<section class="border border-1 border-secondary text-center p-5">
-			<a class="text-decoration-none text-white" href="{{path('app_tweets_index')}}">
-				<h2>Twitter > X</h2>
-			</a>
-		</section>
-
-		<section class="border border-1 border-secondary text-center p-2">
-			<a class="text-decoration-none text-white" href="{{ path('app_tweet_new') }}">Poster un Tweet</a>
-		</section>
-
-		<section>
+	<main class="w-75 mx-auto d-flex flex-column align-items-center">
+		<h1 class="my-5">Twitter > X</h1>
+		<section class="w-75">
 			{% if tweets is empty %}
 				<div class="border border-1 border-secondary text-center">
 					<p>Aucun Tweet pour le moment ! N'hésites pas à en faire un !
@@ -30,7 +18,7 @@
 				</div>
 			{% else %}
 				{% for tweet in tweets %}
-					<div class="border border-1 border-secondary p-2 d-flex flex-column">
+					<div class="border border-1 border-secondary p-2 my-3 d-flex flex-column">
 						<span>
 							{{ tweet.user.username }} - {{ tweet.createdAt ? tweet.createdAt|date('d/m/Y H:i:s') : '' }}								
 							{# {{ tweet.updateAt ? tweet.updateAt|date('d/m/Y H:i:s') : '' }} #}
@@ -61,5 +49,4 @@
 			{% endif %}
 		</section>
 	</main>
-	
 {% endblock %}
