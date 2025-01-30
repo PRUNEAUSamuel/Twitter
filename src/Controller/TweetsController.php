@@ -41,6 +41,15 @@ final class TweetsController extends AbstractController
     }
 
 
+    //Voir un tweet
+    #[Route('/tweet/{id}', name: 'app_tweet_show', methods: ['GET'])]
+    public function show(Tweets $tweet): Response
+    {
+        return $this->render('tweets/show.html.twig', [
+            'tweet' => $tweet,
+        ]);
+    }
+
 
     // Ajouter un tweet
     #[Route('/profile/tweet/new', name: 'app_tweet_new', methods: ['GET', 'POST'])]

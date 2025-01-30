@@ -43,9 +43,7 @@
 					{% if allTweet.content %}
 						<p>{{ allTweet.content }}</p>
 					{% endif %}
-					<a href="{{ path('app_tweet_retweet', { id: allTweet.tweet.id }) }}" class="btn btn-secondary">
-						Retweeter
-					</a>
+
 
 					<div class="border border-1 border-secondary p-2">
 						<p>
@@ -54,6 +52,12 @@
 							{{ allTweet.tweet.createdAt|date('d/m/Y H:i:s') }}
 						</p>
 						<p>{{ allTweet.tweet.content }}</p>
+						
+						<a href="{{ path('app_tweet_retweet', { id: allTweet.tweet.id }) }}" class="btn btn-secondary">
+						Retweeter ({{ allTweet.tweet.getRetweetCount() }})</a>
+						<a href="{{ path('app_tweet_show', { id: allTweet.tweet.id }) }}" class="btn btn-secondary">
+						Voir le tweet
+					</a>
 					</div>
 
 				{% else %}
@@ -65,7 +69,10 @@
 					</p>
 					<p>{{ allTweet.content }}</p>
 					<a href="{{ path('app_tweet_retweet', { id: allTweet.id }) }}" class="btn btn-secondary">
-						Retweeter
+						Retweeter ({{ allTweet.getRetweetCount() }})
+					</a>
+					<a href="{{ path('app_tweet_show', { id: allTweet.id }) }}" class="btn btn-secondary">
+						Voir le tweet
 					</a>
 				{% endif %}
 			</div>
