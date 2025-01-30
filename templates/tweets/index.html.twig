@@ -20,6 +20,14 @@
 				{% for tweet in tweets %}
 					<div class="border border-1 border-secondary p-2 my-3 d-flex flex-column">
 						<span>
+							<span class="pe-2">
+								{% if app.user.profilePicture %}
+									<img src="{{ asset('uploads/profile_pictures/' ~ app.user.profilePicture) }}" alt="Photo de profil" class="rounded-circle" width="40" height="40">
+								{% else %}
+									<i class="fas fa-user-circle" style="font-size: 30px;"></i>
+									{# Icône par défaut si pas de photo #}
+								{% endif %}
+							</span>
 							{{ tweet.user.username }} - {{ tweet.createdAt ? tweet.createdAt|date('d/m/Y H:i:s') : '' }}								
 							{# {{ tweet.updateAt ? tweet.updateAt|date('d/m/Y H:i:s') : '' }} #}
 						</span>
