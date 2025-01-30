@@ -121,36 +121,6 @@ final class TweetsController extends AbstractController
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     // Création d'un Retweet
     #[Route('/{id}/retweet', name: 'app_tweet_retweet', methods: ['GET', 'POST'])]
     public function retweet(Request $request, Tweets $tweet, EntityManagerInterface $entityManager): Response
