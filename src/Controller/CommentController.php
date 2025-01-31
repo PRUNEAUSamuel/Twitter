@@ -83,7 +83,11 @@ final class CommentController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_comment_index', [], Response::HTTP_SEE_OTHER);
+            if ($comment->getParentComment()) {
+                return $this->redirectToRoute('app_comment_show', ['id' => $comment->getParentComment()->getId()]);
+            }
+
+            return $this->redirectToRoute('app_tweets_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('comment/edit.html.twig', [

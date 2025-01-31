@@ -95,8 +95,14 @@
 											<div class="comment mb-4 p-3 border rounded">
 												<strong>{{ comment.user ? comment.user.username : 'Utilisateur inconnu' }}:</strong>
 												{{ comment.content }}
-												
-												<!-- Lien pour répondre au commentaire --><a href="{{ path('app_comment_new', {'tweetId': allTweet.id, 'parentCommentId': comment.id}) }}" class="btn btn-sm btn-outline-primary"> Répondre</a>
+
+												<!-- Lien pour répondre au commentaire -->
+												<a href="{{ path('app_comment_new', {'tweetId': allTweet.id, 'parentCommentId': comment.id}) }}" class="btn btn-sm btn-outline-primary">
+													Répondre</a>
+												{# Bouton pour modifier le commentaire #}
+												{% if app.user and app.user == comment.user %}
+													<a href="{{ path('app_comment_edit', {'id': comment.id}) }}" class="btn btn-sm btn-outline-secondary">Modifier</a>
+												{% endif %}
 												{% if comment.comments is not empty %}
 													{% include 'comment/_replies.html.twig' with {'comment': comment, 'tweet': allTweet} %}
 												{% endif %}
