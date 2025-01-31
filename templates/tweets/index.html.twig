@@ -103,6 +103,13 @@
 												{% if app.user and app.user == comment.user %}
 													<a href="{{ path('app_comment_edit', {'id': comment.id}) }}" class="btn btn-sm btn-outline-secondary">Modifier</a>
 												{% endif %}
+												<!-- Formulaire pour supprimer le commentaire -->
+												{% if app.user and app.user == comment.user %}
+													<form method="POST" action="{{ path('app_comment_delete', {'id': comment.id}) }}" style="display:inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce commentaire ?');">
+														<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ comment.id) }}">
+														<button type="submit" class="btn btn-sm btn-outline-danger">Supprimer</button>
+													</form>
+												{% endif %}
 												{% if comment.comments is not empty %}
 													{% include 'comment/_replies.html.twig' with {'comment': comment, 'tweet': allTweet} %}
 												{% endif %}

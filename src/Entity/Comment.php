@@ -35,10 +35,11 @@ class Comment
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'comments')]
     private ?self $parentComment = null;
 
+    
     /**
      * @var Collection<int, self>
      */
-    #[ORM\OneToMany(targetEntity: self::class, mappedBy: 'parentComment')]
+    #[ORM\OneToMany(targetEntity: self::class, mappedBy: 'parentComment', cascade: ['remove'])]
     private Collection $comments;
 
     public function __construct()

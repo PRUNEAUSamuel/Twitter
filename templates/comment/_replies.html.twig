@@ -5,7 +5,14 @@
 
         <!-- Lien pour répondre au commentaire -->
         <a href="{{ path('app_comment_new', {'tweetId': tweet.id, 'parentCommentId': reply.id}) }}" class="btn btn-sm btn-outline-info">Répondre</a>
-
+        {# Boutons Modifier et Supprimer pour la réponse (enfant) #}
+        {% if app.user and app.user == reply.user %}
+            <a href="{{ path('app_comment_edit', {'id': reply.id}) }}" class="btn btn-sm btn-outline-secondary">Modifier</a>
+            <form method="POST" action="{{ path('app_comment_delete', {'id': reply.id}) }}" style="display:inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette réponse ?');">
+                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ reply.id) }}">
+                <button type="submit" class="btn btn-sm btn-outline-danger">Supprimer</button>
+            </form>
+        {% endif %}
         {% if reply.comments is not empty %} 
             {% include 'comment/_replies.html.twig' with {'comment': reply, 'tweet': tweet} %}
         {% endif %}
