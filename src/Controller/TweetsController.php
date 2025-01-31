@@ -111,7 +111,7 @@ final class TweetsController extends AbstractController
 
     //Confirmation de la suppression d'un tweet
 
-    #[Route('/profile/tweet/{id}/confirm-delete', name: 'app_tweet_confirm_delete', methods: ['GET'])]
+    #[Route('/profile/tweet/{id}/confirm-delete', name: 'app_tweet_confirm_delete', methods: ['GET', 'POST'])]
 
     public function confirmDelete(Tweets $tweet): Response
     {
