@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Comment index{% endblock %}
+
+{% block body %}
+    <h1>Comment index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th class="text-white">Id</th>
+                <th class="text-white">Content</th>
+                <th class="text-white">CreateAt</th>
+                <th class="text-white">UpdateAt</th>
+                <th class="text-white">actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for comment in comments %}
+            <tr>
+                <td class="text-white">{{ comment.id }}</td>
+                <td class="text-white">{{ comment.content }}</td>
+                <td class="text-white">{{ comment.createdAt ? comment.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td class="text-white">{{ comment.updateAt ? comment.updateAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_comment_show', {'id': comment.id}) }}" class="text-white">show</a>
+                    <a href="{{ path('app_comment_edit', {'id': comment.id}) }}" class="text-white">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr >
+                <td colspan="5" class=" text-white">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_comment_new', {'tweetId': tweet.id}) }}">Create new</a>
+{% endblock %}

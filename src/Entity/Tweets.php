@@ -43,12 +43,19 @@ class Tweets
     #[ORM\Column(type: 'integer')]
     private int $retweetCount = 0;
 
+    /**
+     * @var Collection<int, Comment>
+     */
+    #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'tweet')]
+    private Collection $comments;
+
 
     public function __construct()
     {
         $this->likes = new ArrayCollection();
         $this->createdAt = new \DateTimeImmutable();
         $this->updateAt = new \DateTimeImmutable();
+        $this->comments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -155,6 +162,35 @@ class Tweets
         return $this;
     }
 
+    /**
+     * @return Collection<int, Comment>
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function addComment(Comment $comment): static
+    {
+        if (!$this->comments->contains($comment)) {
+            $this->comments->add($comment);
+            $comment->setTweet($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComment(Comment $comment): static
+    {
+        if ($this->comments->removeElement($comment)) {
+            // set the owning side to null (unless already changed)
+            if ($comment->getTweet() === $this) {
+                $comment->setTweet(null);
+            }
+        }
+
+        return $this;
+    }
     public function isRetweet() : bool{
         return false;
     }

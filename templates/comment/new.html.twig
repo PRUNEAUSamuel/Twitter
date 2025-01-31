@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Comment{% endblock %}
+
+{% block body %}
+    <h1>Create new Comment</h1>
+
+    {{ include('comment/_form.html.twig' , { 'tweet': tweet }) }}
+
+    <a href="{{ path('app_tweets_index') }}">back</a>
+{% endblock %}

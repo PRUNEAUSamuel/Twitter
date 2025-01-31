@@ -35,8 +35,7 @@ final class TweetsController extends AbstractController
 
         return $this->render('tweets/index.html.twig', [
             'allTweets' => $allTweets,
-            'tweets' => $tweetsRepository->findBy([], ['createdAt' => 'DESC']),
-            'retweets' => $retweetRepository->findBy([], ['createdAt' => 'DESC']),
+           
         ]);
     }
 
