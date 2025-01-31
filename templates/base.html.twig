@@ -17,106 +17,91 @@
 		{% block javascripts %}
 			<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
-			{% block importmap %}
-				{{ importmap('app') }}
-			{% endblock %}
-		{% endblock %}
-	</head>
-	<body data-bs-theme="dark-oled" class="text-white">
-		<nav class="navbar navbar-expand-lg bg-black border-bottom border-secondary">
-			<div class="container-fluid">
-				<div class="w-100 d-flex align-items-center" id="navbarSupportedContent">
-					<ul class="navbar-nav me-auto fw-bold flex-row align-items-end">
-						<li class="nav-item mx-3">
-							<a class="nav-link text-white" href="{{ path('app_tweets_index') }}">Accueil</a>
-						</li>
-						<li class="nav-item mx-3">
-							<a class="nav-link text-white" href="{{ path('app_profile') }}">Profil</a>
-						</li>
-						<li class="nav-item mx-3">
-							<a class="nav-link text-white" href="{{ path('app_tweet_new') }}">Publier</a>
-						</li>
-						<li class="nav-item mx-3">
-							{% if app.user %}
-								<a id="logout-link" class="nav-link text-white" href="">Déconnexion</a>
-								<form id="logout-form" action="{{ path('app_logout') }}" method="POST" style="display: none;">
-									{{ csrf_token('logout') }}
-								</form>
-								<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-								<script type="text/javascript">
-									document.getElementById("logout-link").addEventListener("click", function (event) {
-event.preventDefault();
-Swal.fire({
-title: 'Êtes-vous sûr de vouloir vous déconnecter ?',
-text: 'Vous serez déconnecté de votre session.',
-icon: 'warning',
-showCancelButton: true,
-confirmButtonText: 'Déconnexion',
-cancelButtonText: 'Annuler',
-customClass: {
-popup: 'border border-secondary bg-black text-white', // Personnalisation de la popup
-confirmButton: 'btn btn-light text-black fw-bold', // Personnalisation du bouton de confirmation
-cancelButton: 'btn btn-black text-white fw-bold border-secondary' // Personnalisation du bouton d'annulation
-},
-// Animations
-showClass: {
-popup: 'animate__animated animate__fadeInDown'
-},
-hideClass: {
-popup: 'animate__animated animate__fadeOutUp'
-}
-}).then((result) => {
-if (result.isConfirmed) { // Si l'utilisateur confirme, soumettre le formulaire de déconnexion
-document.getElementById("logout-form").submit();
-}
-});
-});
-								</script>
-							{% else %}
-								<a class="nav-link text-white" href="{{ path('app_login') }}">Connexion</a>
-							{% endif %}
-						</li>
-					</ul>
-					<div class="d-flex justify-content-center" style="flex-grow: 1;">
-						<div class="dropdown">
-							<div class="nav-link text-white  d-flex align-items-center" id="navbarDropdown">
-								{% if app.user %}
-									{% if app.user.profilePicture %}
-										<img src="{{ asset('uploads/profile_pictures/' ~ app.user.profilePicture) }}" alt="Photo de profil" class="rounded-circle" width="80" height="80">
-									{% else %}
-										<i class="fas fa-user-circle" style="font-size: 30px;"></i>
-										{# Icône par défaut si pas de photo #}
-									{% endif %}
-								{% endif %}
-							</div>
-						</div>
-					</div>
-					<form class="d-flex" role="search">
-						<div class="form-floating mx-1">
-							<input type="search" class="form-control me-2 border-secondary text-white" id="floatingSearch" placeholder="" aria-label="Search">
-							<label for="floatingSearch">Mot clé</label>
-						</div>
-						<button class="btn btn-outline-success" type="submit">Rechercher</button>
-					</form>
-				</div>
-			</div>
-		</nav>
-		<script>
-			// Fonction pour basculer l'affichage des commentaires
-function toggleComments(tweetId) {
-const commentsContainer = document.getElementById(`comments-${tweetId}`);
-const button = event.target;
-
-// Si les commentaires sont cachés, on les affiche
-if (commentsContainer.style.display === "none" || commentsContainer.style.display === "") {
-commentsContainer.style.display = "block";
-button.textContent = "Masquer les commentaires"; // Changer le texte du bouton
-} else {
-commentsContainer.style.display = "none";
-button.textContent = "Afficher les commentaires"; // Changer le texte du bouton
-}
-}
-		</script>
-	</body>
-	{% block body %}{% endblock %}
+            {% block importmap %}{{ importmap('app') }}{% endblock %}
+        {% endblock %}
+    </head>
+    <body data-bs-theme="dark-oled" class="text-white">
+        <nav class="navbar navbar-expand-lg bg-black border-bottom border-secondary">
+            <div class="container-fluid">
+                <div class="w-100 d-flex align-items-center" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto fw-bold flex-row align-items-end">
+                        <li class="nav-item mx-3">
+                            <div class="d-flex justify-content-center" style="flex-grow: 1;">
+                                <div class="dropdown">
+                                    <div class="nav-link text-white d-flex align-items-center p-0" id="navbarDropdown">
+                                        {% if app.user %}
+                                            {% if app.user.profilePicture %}
+                                                <img src="{{ asset('uploads/profile_pictures/' ~ app.user.profilePicture) }}" alt="Photo de profil" class="rounded-circle" width="40" height="40">
+                                            {% else %}
+                                                <i class="fas fa-user-circle" style="font-size: 30px;"></i>
+                                                {# Icône par défaut si pas de photo #}
+                                            {% endif %}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="nav-item mx-3">
+                            <a class="nav-link text-white" href="{{ path('app_tweets_index') }}">Accueil</a>
+                        </li>
+                        <li class="nav-item mx-3">
+                            <a class="nav-link text-white" href="{{ path('app_profile') }}">Profil</a>
+                        </li>
+                        <li class="nav-item mx-3">
+                            <a class="nav-link text-white" href="{{ path('app_tweet_new') }}">Publier</a>
+                        </li>
+                        <li class="nav-item mx-3">
+                            {% if app.user %}
+                                <a id="logout-link" class="nav-link text-white" href="">Déconnexion</a>
+                                <form id="logout-form" action="{{ path('app_logout') }}" method="POST" style="display: none;">
+                                    {{ csrf_token('logout') }}
+                                </form>
+                                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                                <script type="text/javascript">
+                                    document.getElementById("logout-link").addEventListener("click", function(event) {
+                                        event.preventDefault();
+                                        Swal.fire({
+                                            title: 'Êtes-vous sûr de vouloir vous déconnecter ?',
+                                            text: 'Vous serez déconnecté de votre session.',
+                                            icon: 'warning',
+                                            showCancelButton: true,
+                                            confirmButtonText: 'Déconnexion',
+                                            cancelButtonText: 'Annuler',
+                                            customClass: {
+                                                popup: 'border border-secondary bg-black text-white', // Personnalisation de la popup
+                                                confirmButton: 'btn btn-light text-black fw-bold', // Personnalisation du bouton de confirmation
+                                                cancelButton: 'btn btn-black text-white fw-bold border-secondary' // Personnalisation du bouton d'annulation
+                                            },
+                                            // Animations
+                                            showClass: {
+                                                popup: 'animate__animated animate__fadeInDown'
+                                            },
+                                            hideClass: {
+                                                popup: 'animate__animated animate__fadeOutUp'
+                                            }
+                                        }).then((result) => {
+                                            if (result.isConfirmed) {
+                                                // Si l'utilisateur confirme, soumettre le formulaire de déconnexion
+                                                document.getElementById("logout-form").submit();
+                                            }
+                                        });
+                                    });
+                                </script>
+                            {% else %}
+                                <a class="nav-link text-white" href="{{ path('app_login') }}">Connexion</a>
+                            {% endif %}
+                        </li>
+                    </ul>
+                    <form class="d-flex" role="search">
+                        <div class="form-floating mx-1">
+                            <input type="search" class="form-control me-2 border-secondary text-white" id="floatingSearch" placeholder="" aria-label="Search">
+                            <label for="floatingSearch">Mot clé</label>
+                        </div>
+                        <button class="btn btn-outline-success" type="submit">Rechercher</button>
+                    </form>
+                </div>
+            </div>
+        </nav>
+    </body>
+    {% block body %}{% endblock %}
 </html>

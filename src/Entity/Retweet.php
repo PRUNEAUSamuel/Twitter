@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\RetweetRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\Users;
 
 #[ORM\Entity(repositoryClass: RetweetRepository::class)]
 class Retweet
@@ -20,7 +21,7 @@ class Retweet
     private ?Users $user = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $created_at = null;
+    private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(length: 255)]
     private ?string $content = null;
@@ -56,12 +57,12 @@ class Retweet
 
     public function getCreatedAt(): ?\DateTimeImmutable
     {
-        return $this->created_at;
+        return $this->createdAt;
     }
 
     public function setCreatedAt(\DateTimeImmutable $created_at): static
     {
-        $this->created_at = $created_at;
+        $this->createdAt = $created_at;
 
         return $this;
     }
@@ -76,5 +77,10 @@ class Retweet
         $this->content = $content;
 
         return $this;
+    }
+    
+
+    public function isRetweet() : bool {
+        return true;
     }
 }

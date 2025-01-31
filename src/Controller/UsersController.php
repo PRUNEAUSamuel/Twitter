@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Users;
+use App\Entity\Retweet;
 use App\Form\UsersType;
 use App\Form\SearchType;
 use App\Repository\UsersRepository;
@@ -65,9 +66,21 @@ final class UsersController extends AbstractController
             ->getRepository(Tweets::class)
             ->findBy(['user' => $user], ['createdAt' => 'DESC']);
 
+        $retweets = $entityManager
+            ->getRepository(Retweet::class)
+            ->findBy(['user' => $user], ['createdAt' => 'DESC']);
+
+            $allTweets= array_merge($tweets, $retweets);
+
+            usort($allTweets, function($a,$b){
+                return $b->getCreatedAt() <=> $a->getCreatedAt();
+            });
+        
         return $this->render('users/profile.html.twig', [
             'user' => $user,
             'tweets' => $tweets,
+            'retweets' => $retweets,
+            'allTweets' => $allTweets,
         ]);
     }
 

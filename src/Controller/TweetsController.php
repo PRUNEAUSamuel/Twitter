@@ -6,6 +6,7 @@ use App\Entity\Tweets;
 use App\Entity\Likes;
 use App\Entity\Retweet;
 use App\Form\TweetsType;
+use App\Repository\RetweetRepository;
 use App\Repository\TweetsRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -20,13 +21,34 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 final class TweetsController extends AbstractController
 {
     #[Route(name: 'app_tweets_index', methods: ['GET'])]
-    public function index(TweetsRepository $tweetsRepository): Response
+    public function index(TweetsRepository $tweetsRepository,RetweetRepository $retweetRepository): Response
     {
+        $tweets = $tweetsRepository->findBy([], ['createdAt' => 'DESC']);
+        $retweets = $retweetRepository->findBy([], ['createdAt' => 'DESC']);
+
+        $allTweets= array_merge($tweets, $retweets);
+
+        usort($allTweets, function($a,$b){
+            return $b->getCreatedAt() <=> $a->getCreatedAt();
+        });
+
+
         return $this->render('tweets/index.html.twig', [
+            'allTweets' => $allTweets,
             'tweets' => $tweetsRepository->findBy([], ['createdAt' => 'DESC']),
+            'retweets' => $retweetRepository->findBy([], ['createdAt' => 'DESC']),
         ]);
     }
 
+
+    //Voir un tweet
+    #[Route('/tweet/{id}', name: 'app_tweet_show', methods: ['GET'])]
+    public function show(Tweets $tweet): Response
+    {
+        return $this->render('tweets/show.html.twig', [
+            'tweet' => $tweet,
+        ]);
+    }
 
 
     // Ajouter un tweet
@@ -163,38 +185,4 @@ public function like(int $tweetId, TweetsRepository $tweetRepository, Request $r
     ]);
 }
 
-    // Création d'un Retweet
-    #[Route('/{id}/retweet', name: 'app_tweet_retweet', methods: ['GET', 'POST'])]
-    public function retweet(Request $request, Tweets $tweet, EntityManagerInterface $entityManager): Response
-    {   
-        // Vérification si l'user est connecté, sinon retour à la page login
-        $user = $this->getUser(); 
-        if (!$user) {
-            return $this->redirectToRoute('app_login');
-        }
-
-        //Vérification que le formulaire a bien été envoyé avec post et récuperation du content)
-        if ($request->isMethod('POST')) {
-            $retweetContent = $request->request->get('retweet_content');
-
-            // Création du retweet : Instancie un retweet / Liaison avec le user + le contenu du retweet et du tweet originel + date du retweet 
-            $retweet = new Tweets();
-            $retweet->setUser($user); 
-            $retweet->setContent($retweetContent . "\n\n------\n" . $tweet->getContent());
-            $retweet->setCreatedAt(new \DateTimeImmutable());
-            $retweet->setUpdateAt(new \DateTimeImmutable());
-
-            // Incrémentation du compteur Retweet
-            $tweet->incrementRetweetCount();
-
-            //Enregistrement dans la BDD + redirection a la page d'accueil
-            $entityManager->persist($retweet);
-            $entityManager->flush();
-            return $this->redirectToRoute('app_tweets_index');
-        }
-        
-        return $this->render('tweets/retweet.html.twig', [
-            'tweet' => $tweet,
-        ]);
-    }
 }
