@@ -29,7 +29,7 @@ class Comment
     private ?Users $user = null;
 
     #[ORM\ManyToOne(inversedBy: 'comments')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true, onDelete: "SET NULL")]
     private ?Tweets $tweet = null;
 
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'comments')]

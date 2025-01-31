@@ -4,23 +4,26 @@
 {% endblock %}
 
 {% block body %}
-	<main>
-		<section>
+<main class="w-75 mx-auto d-flex flex-column align-items-center">
+		<h1 class="my-5">Twitter > X</h1>
+
+		<section class="w-75 mx-auto d-flex flex-column align-items-center">
+
 			<h2>Retweeter</h2>
 
-			<form action="{{ path('app_tweet_retweet', { id: tweet.id }) }}" method="POST">
+			<form action="{{ path('app_tweet_retweet', { id: tweet.id }) }}" method="POST" class=" m-2 w-75 mx-auto d-flex flex-column align-items-center">
 				<div>
-					<label for="retweet-content-{{ tweet.id }}">
+					<label for="retweet-content-{{ tweet.id }}" class="m-2">
 						Retweeter ici :</label>
-					<input type="text" id="retweet-content-{{ tweet.id }}" name="retweet_content" maxlength="255"/>
+					<input type="text" id="retweet-content-{{ tweet.id }}" name="retweet_content" maxlength="255" class="m-2"/>
 				</div>
-				<button type="submit">Retweeter</button>
+				<button type="submit" class="btn border-white fw-bold comment-btn bouton m-5">Retweeter</button>
 			</form>
 
 
-			<div>
+			<div class="w-75 mx-auto d-flex flex-column align-items-center m-2">
 				<h3>Tweet original</h3>
-				<div class="border border-1 border-secondary p-2 m-2 rounded-1">
+				<div class="border border-1 border-secondary p-2 m-5 rounded-1">
 					<span>
 						<span class="pe-2">
 							{% if app.user.profilePicture %}
