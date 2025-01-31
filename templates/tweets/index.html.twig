@@ -43,6 +43,75 @@
 								</span>
 								<p class="p-2 t-1 mb-2 text-break">{{ allTweet.tweet.content }}</p>
 							</div>
+							<div class="comments">
+
+{% if tweet.comments is not empty %}
+
+<h4 class="mt-4">Commentaires :</h4>
+
+*<!-- Bouton pour afficher/masquer les commentaires -->*
+
+<button class="btn btn-outline-secondary btn-sm mb-3" onclick="toggleComments({{ tweet.id }})">
+
+Afficher les commentaires
+
+</button>
+
+<div id="comments-{{ tweet.id }}" class="comments-list" style="display: none;">
+
+{% for comment in tweet.comments %}
+
+<div class="comment  mb-4 p-3 border rounded">
+
+<strong>{{ comment.user ? comment.user.username : 'Utilisateur inconnu' }}
+
+:</strong>
+
+{{ comment.content }}
+
+<p class="mt-2 mb-3">{{ comment.content }}</p>
+
+*<!-- Lien pour répondre au commentaire -->*
+
+<a href="{{ path('app_comment_new', {'tweetId': tweet.id, 'parentCommentId': comment.id}) }}" class="btn btn-sm btn-outline-primary">Répondre</a>
+
+<div class="replies mt-3 ms-4" style="margin-left: 20px;">
+
+{% include 'comment/_replies.html.twig' with {'comment': comment, 'tweet': tweet} %}
+
+</div>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+{% else %}
+
+<p>Aucun commentaire pour ce tweet.</p>
+
+{% endif %}
+
+</div>
+
+*<!-- Formulaire pour ajouter un commentaire -->*
+
+{% if app.user %}
+
+<a href="{{ path('app_comment_new', {'tweetId': tweet.id}) }}" class="btn border-white fw-bold comment-btn bouton">
+
+<span>Commenter</span>
+
+<i class="fa-regular fa-comment"></i>
+
+</a>
+
+{% else %}
+
+<p>Vous devez être connecté pour commenter.</p>
+
+{% endif %}
 							<div class="justify-content-end d-flex">
 								<button onclick="window.location.href='#'" {% if not app.user %}disabled{% endif %} class="btn border-white fw-bold comment-btn bouton">
 									<span>1</span>

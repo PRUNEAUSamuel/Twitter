@@ -102,6 +102,22 @@
                 </div>
             </div>
         </nav>
+        <script>
+			// Fonction pour basculer l'affichage des commentaires
+function toggleComments(tweetId) {
+const commentsContainer = document.getElementById(`comments-${tweetId}`);
+const button = event.target;
+
+// Si les commentaires sont cachés, on les affiche
+if (commentsContainer.style.display === "none" || commentsContainer.style.display === "") {
+commentsContainer.style.display = "block";
+button.textContent = "Masquer les commentaires"; // Changer le texte du bouton
+} else {
+commentsContainer.style.display = "none";
+button.textContent = "Afficher les commentaires"; // Changer le texte du bouton
+}
+}
+		</script>
     </body>
     {% block body %}{% endblock %}
 </html>

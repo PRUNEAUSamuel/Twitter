@@ -191,4 +191,8 @@ class Tweets
 
         return $this;
     }
+    public function isRetweet() : bool{
+        return false;
+    }
+    
 }
