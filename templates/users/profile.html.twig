@@ -100,13 +100,29 @@
 							</p>
 							<p>{{ allTweet.content }}</p>
 
-							<div class="d-flex justify-content-end align-items-center">
-								<a href="{{ path('app_tweet_edit', {'id': allTweet.id}) }}" class="fs-7 btn btn-secondary m-3">Modifier mon tweet</a>
 
-								<form method="get" action="{{ path('app_tweet_confirm_delete', {'id': allTweet.id}) }}" style="display:inline;">
-									<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ allTweet.id) }}">
-									<button type="submit" class="btn btn-secondary">Supprimer mon tweet</button>
-								</form>
+							<div class="d-flex justify-content-end align-items-center">
+
+
+								{% if allTweet.isRetweet() %}
+									<a href="{{ path('app_retweet_edit', {'id': allTweet.id}) }}" class="fs-7 btn btn-secondary m-3">Modifier mon retweet</a>
+								{% else %}
+									<a href="{{ path('app_tweet_edit', {'id': allTweet.id}) }}" class="fs-7 btn btn-secondary m-3">Modifier mon tweet</a>
+
+								{% endif %}
+
+								{% if allTweet.isRetweet() %}
+									<form method="post" action="{{ path('app_retweet_confirm_delete', {'id': allTweet.id}) }}" style="display:inline;">
+										<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ allTweet.id) }}">
+										<button type="submit" class="fs-7 btn btn-secondary m-3">Supprimer mon Retweet</button>
+									</form>
+								{% else %}
+									<form method="get" action="{{ path('app_tweet_confirm_delete', {'id': allTweet.id}) }}" style="display:inline;">
+										<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ allTweet.id) }}">
+										<button type="submit" class="btn btn-secondary">Supprimer mon tweet</button>
+									</form>
+								{% endif %}
+
 							</div>
 						</li>
 					{% endfor %}
@@ -115,6 +131,4 @@
 		</div>
 	</section>
 
-</main>
-
-{% endblock %}
+</main>{% endblock %}

@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Suppression d'un Tweet{% endblock %}
+
+{% block body %}
+
+<main class="d-flex flex-column justify-content-center align-items-center mt-5 text-center">
+
+
+<section class="m-3">
+<h2>Êtes-vous sûr de vouloir supprimer ce Retweet ?</h2>
+</section>
+
+<section>
+<hr>
+<p>{{retweet.content}}</p>
+<p><small>Publié le : {{retweet.createdAt|date('d/m/Y H:i')}}</small></p>
+<hr>
+</section>
+
+<section>
+<form method="post" action="{{ path('app_retweet_delete', {'id': retweet.id}) }}">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ retweet.id) }}">
+    <button type= submit class="btn btn-danger m-4">Oui, Supprimer</button>
+</form>
+<a href="{{path('app_profile') }}" class="btn btn-secondary">Annuler</a>
+</section>
+
+</main>
+
+
+
+
+
+{% endblock body %}

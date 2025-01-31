@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h2 class="mb-4">Modifier votre retweet</h2>
+
+        {{ form_start(form) }}
+
+        {% for error in form.content.vars.errors %}
+        <div class="text-danger">{{ error.message }}</div>
+        {% endfor %}
+
+            <div class="mb-3 text-white">
+                {{ form_label(form.content) }}
+                {{ form_widget(form.content, { 'attr': {'class': 'form-control text-white'} }) }}
+                {{ form_errors(form.content) }}
+            </div>
+
+            <button type="submit" class="btn btn-secondary text-white p-2 border rounded">Enregistrer les modifications</button>
+        {{ form_end(form) }}
+
+        <a href="{{ path('app_profile') }}" class="btn btn-secondary mt-3">Retour</a>
+    </div>
+{% endblock %}
