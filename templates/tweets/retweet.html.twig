@@ -1,24 +1,41 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Retweeter{% endblock %}
+{% block title %}Retweeter
+{% endblock %}
 
 {% block body %}
-<main>
-    <section>
-        <h2>Retweeter</h2>
+	<main>
+		<section>
+			<h2>Retweeter</h2>
 
-        <form action="{{ path('app_tweet_retweet', { id: tweet.id }) }}" method="POST">
-            <div>
-                <label for="retweet-content-{{ tweet.id }}"> Retweeter ici :</label>
-                <input 
-                    type="text"
-                    id="retweet-content-{{ tweet.id }}" 
-                    name="retweet_content" 
-                    maxlength="255"
-                />
-            </div>
-            <button type="submit">Retweeter</button>
-        </form>
-    </section>
-</main>
+			<form action="{{ path('app_tweet_retweet', { id: tweet.id }) }}" method="POST">
+				<div>
+					<label for="retweet-content-{{ tweet.id }}">
+						Retweeter ici :</label>
+					<input type="text" id="retweet-content-{{ tweet.id }}" name="retweet_content" maxlength="255"/>
+				</div>
+				<button type="submit">Retweeter</button>
+			</form>
+
+
+			<div>
+				<h3>Tweet original</h3>
+				<div class="border border-1 border-secondary p-2 m-2 rounded-1">
+					<span>
+						<span class="pe-2">
+							{% if app.user.profilePicture %}
+								<img src="{{ asset('uploads/profile_pictures/' ~ app.user.profilePicture) }}" alt="Photo de profil" class="rounded-circle" width="40" height="40">
+							{% else %}
+								<i class="fas fa-user-circle" style="font-size: 30px;"></i>
+							{% endif %}
+						</span>
+						{{ tweet.user.username }}
+						-
+						{{ tweet.createdAt|date('d/m/Y H:i:s') }}
+					</span>
+					<p class="p-2 t-1 mb-2 text-break">{{ tweet.content }}</p>
+				</div>
+			</div>
+		</section>
+	</main>
 {% endblock %}
