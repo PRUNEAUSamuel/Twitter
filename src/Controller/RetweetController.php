@@ -110,7 +110,7 @@ final class RetweetController extends AbstractController
 
     
     // Supprimer un retweet 
-    #[Route('/profile/retweet/{id}/delete', name: 'app_retweet_delete', methods: ['POST'])]
+    #[Route('/profile/retweet/{id}/delete', name: 'app_retweet_delete', methods: ['GET', 'POST'])]
 public function deleteRetweet(Request $request, Retweet $retweet, EntityManagerInterface $entityManager): Response
 {
     // Vérifier que l'utilisateur est bien le propriétaire du retweet
@@ -124,7 +124,9 @@ public function deleteRetweet(Request $request, Retweet $retweet, EntityManagerI
         $tweet = $retweet->getTweet();
 
         // Décrémenter le compteur de retweets du tweet original
+        if ($tweet !== null) {
         $tweet->decrementRetweetCount();
+        }
 
         // Supprimer le retweet
         $entityManager->remove($retweet);
